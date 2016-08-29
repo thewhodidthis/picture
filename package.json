@@ -28,6 +28,7 @@
     "clear:logs": "rm -f *.log",
     "lint": "(jshint index.js & jscs index.js --reporter=inlinesingle) 2>&1 | tee lint-js.log",
     "postlint": "find lint-js.log -size 0 -print0 | xargs -0 rm",
+    "prestart": "npm run build",
     "start": "npm run watch",
     "serve": "php -S localhost:8000",
     "watch": "watchify index.js -s Picture -o ./dist/picture.js",

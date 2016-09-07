@@ -1,1 +1,0 @@
-/Users/thewhodidthis/Desktop/picture/dist/picture.js

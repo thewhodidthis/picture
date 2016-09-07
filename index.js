@@ -1,10 +1,11 @@
 'use strict';
 
-function Picture(w, h) {
+function Picture(width, height) {
+  this.options = Object.create(Picture.defaults);
   this.context = document.createElement('canvas').getContext('2d');
 
-  this.context.canvas.width = w || Picture.defaults.w;
-  this.context.canvas.height = h || Picture.defaults.h;
+  this.context.canvas.width = width || this.options.width;
+  this.context.canvas.height = height || this.options.height;
 }
 
 Picture.prototype = {
@@ -45,8 +46,8 @@ Picture.prototype = {
 };
 
 Picture.defaults = {
-  w: 500,
-  h: 300
+  width: 500,
+  height: 300
 };
 
 module.exports = Picture;

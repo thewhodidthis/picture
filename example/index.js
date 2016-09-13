@@ -1,21 +1,21 @@
 'use strict';
 
 var html = document.documentElement;
-var master = document.getElementById('canvas');
+var canvas = document.getElementById('canvas');
 var sprite = document.createElement('img');
 
 var w = 800;
 var h = 600;
-var x = (master.width - w) * 0.5;
-var y = (master.height - h) * 0.5;
+var x = (canvas.width - w) * 0.5;
+var y = (canvas.height - h) * 0.5;
 var count = 0;
 
 var draw = function() {
-  picture.source(sprite).target(master, x, y);
+  picture.source(sprite).target(canvas, x, y);
 };
 
 var pimp = function() {
-  picture.filter().target(master, x, y);
+  picture.filter().target(canvas, x, y);
 }
 
 var picture = new Picture(w, h);
@@ -48,15 +48,8 @@ if (window !== window.top) {
   html.className = html.className + ' is-iframe';
 }
 
-sprite.addEventListener('load', function _onLoad(e) {
-  draw();
-}, false);
-
-sprite.src = '/sprite.jpg';
-
-document.addEventListener('click', function _onClick(e) {
+canvas.addEventListener('click', function _onClick(e) {
   e.preventDefault();
-  e.stopPropagation();
 
   if (count % 2 === 0) {
     pimp();
@@ -66,3 +59,10 @@ document.addEventListener('click', function _onClick(e) {
 
   count += 1;
 }, false)
+
+sprite.addEventListener('load', function _onLoad(e) {
+  draw();
+}, false);
+
+sprite.src = '/sprite.jpg';
+

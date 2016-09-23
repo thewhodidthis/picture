@@ -13,34 +13,38 @@ Picture.prototype = {
   constructor: Picture,
 
   _copy: function(source, target, sx, sy, dx, dy, w, h) {
+    if (source instanceof Picture) {
+      source = source.context.canvas;
+    }
+
+    if (target instanceof Picture) {
+      target = target.context.canvas;
+    }
+
     var sx = sx || 0;
     var sy = sy || 0;
     var dx = dx || 0;
     var dy = dy || 0;
+
     var w = w || source.width;
     var h = h || source.height;
 
-    target.getContext('2d').drawImage(source, sx, sy, w - sx, h - sy, dx, dy, w - sx, h - sy);
+    w = w - sx;
+    h = h - sy;
+
+    target.getContext('2d').drawImage(source, sx, sy, w, h, dx, dy, w, h);
 
     return this;
   },
 
   source: function(target, x, y) {
-    if (target instanceof Picture) {
-      target = target.context.canvas;
-    }
-
-    this._copy(target, this.context.canvas, x, y, 0, 0);
+    this._copy(target, this, x, y, 0, 0);
 
     return this;
   },
 
   target: function(target, x, y) {
-    if (target instanceof Picture) {
-      target = target.context.canvas;
-    }
-
-    this._copy(this.context.canvas, target, 0, 0, x, y);
+    this._copy(this, target, 0, 0, x, y);
 
     return this;
   }

@@ -8,6 +8,11 @@ figure {
   margin: 0;
 }
 
+noscript {
+  margin: 6px;
+  font: italic 12px/28px arial, sans-serif;
+}
+
 figure {
   top: 50%;
   width: 100%;
@@ -28,6 +33,7 @@ figcaption p {
 canvas {
   display: block;
   background: #000;
+  min-height: 100%;
 }
 
 .is-iframe {

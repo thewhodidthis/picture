@@ -61,5 +61,5 @@ canvas.addEventListener('click', function _onClick(e) {
 }, false)
 
 sprite.addEventListener('load', draw, false);
-sprite.setAttribute('src', '/sprite.jpg');
+sprite.setAttribute('src', 'sprite.jpg');
 

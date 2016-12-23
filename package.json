@@ -22,7 +22,7 @@
     "example": "example"
   },
   "config": {
-    "remote": "thewhodidthis@umfufu:www/example/picture/"
+    "remote": "thewhodidthis@zazie:www/example/picture/"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

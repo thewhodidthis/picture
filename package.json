@@ -8,8 +8,8 @@
     "picture",
     "sprite"
   ],
-  "jsnext:main": "index.es",
   "main": "index.js",
+  "module": "index.es",
   "homepage": "https://github.com/thewhodidthis/picture#readme",
   "repository": {
     "type": "git",

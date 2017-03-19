@@ -1,59 +1,48 @@
-function Picture(width, height) {
-  this.options = Object.create(Picture.defaults);
-  this.context = document.createElement('canvas').getContext('2d');
+// # Picture
+// 2d canvas context helpers
+// Note: Avoid default params for now, because dist file size
 
-  this.context.canvas.width = parseInt(width, 10) || this.options.width;
-  this.context.canvas.height = parseInt(height, 10) || this.options.height;
-}
+// Will handle canvas tags straight up or as properties of
+const copy = (source, target, sourceX, sourceY, dx, dy, width, height) => {
+  const sx = sourceX || 0;
+  const sy = sourceY || 0;
 
-Picture.prototype = {
-  constructor: Picture,
+  const s = source.canvas || source;
+  const t = target.canvas || target;
 
-  copy(s, d, sX, sY, dX, dY, w, h) {
-    let source = s;
-    let target = d;
+  const w = (width || source.width) - sx;
+  const h = (height || source.height) - sy;
 
-    // s: source, d: destination
-    if (s instanceof Picture) {
-      source = s.context.canvas;
-    }
-
-    if (d instanceof Picture) {
-      target = d.context.canvas;
-    }
-
-    const sx = sX || 0;
-    const sy = sY || 0;
-    const dx = dX || 0;
-    const dy = dY || 0;
-
-    let width = w || source.width;
-    let height = h || source.height;
-
-    width -= sx;
-    height -= sy;
-
-    target.getContext('2d').drawImage(source, sx, sy, width, height, dx, dy, width, height);
-
-    return this;
-  },
-
-  source(canvas, x, y) {
-    this.copy(canvas, this, x, y, 0, 0);
-
-    return this;
-  },
-
-  target(canvas, x, y) {
-    this.copy(this, canvas, 0, 0, x, y);
-
-    return this;
-  }
+  t.getContext('2d').drawImage(s, sx, sy, w, h, dx || 0, dy || 0, w, h);
 };
 
-Picture.defaults = {
-  width: 500,
-  height: 300
+// Bundle methods and data
+const Picture = (w, h, c) => {
+  const width = w || 500;
+  const height = h || 300;
+  const canvas = c || document.createElement('canvas');
+
+  return {
+    width,
+    height,
+
+    // Resize the canvas
+    canvas: Object.assign(canvas, { width, height }),
+
+    // Bare basics
+    context: canvas.getContext('2d'),
+    source(source, x, y) {
+      copy(source, canvas, x, y);
+
+      return this;
+    },
+    target(target, x, y) {
+      copy(canvas, target, 0, 0, x, y);
+
+      return this;
+    },
+  };
 };
 
 export default Picture;
+

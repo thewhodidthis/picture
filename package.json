@@ -25,7 +25,7 @@
     "remote": "thewhodidthis@zazie:www/example/picture/"
   },
   "scripts": {
-    "test": "node test",
+    "test": "browserify test/*.js | testling -x open",
     "clear": "npm run clear:dist && npm run clear:logs",
     "clear:dist": "rm -rf dist/",
     "clear:logs": "rm -f *.log",

@@ -3,7 +3,7 @@
 
 ### Setup
 ```sh
-npm install thewhodidthis/picture --save
+npm install thewhodidthis/picture
 ```
 
 ### Usage

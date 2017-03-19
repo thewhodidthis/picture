@@ -2,10 +2,10 @@
 
 // # Picture
 // 2d canvas context helpers
-// Note: Avoid default params for now, because dist file size
+// Avoiding default params for now, because dist file size
 
 // Will handle canvas tags straight up or as properties of
-var copy = function copy(source, target, sourceX, sourceY, dx, dy, width, height) {
+var copy = function copy(source, target, sourceX, sourceY, tx, ty, width, height) {
   var sx = sourceX || 0;
   var sy = sourceY || 0;
 
@@ -15,7 +15,7 @@ var copy = function copy(source, target, sourceX, sourceY, dx, dy, width, height
   var w = (width || source.width) - sx;
   var h = (height || source.height) - sy;
 
-  t.getContext('2d').drawImage(s, sx, sy, w, h, dx || 0, dy || 0, w, h);
+  t.getContext('2d').drawImage(s, sx, sy, w, h, tx || 0, ty || 0, w, h);
 };
 
 // Bundle methods and data

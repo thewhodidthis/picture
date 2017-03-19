@@ -1,9 +1,9 @@
 // # Picture
 // 2d canvas context helpers
-// Note: Avoid default params for now, because dist file size
+// Avoiding default params for now, because dist file size
 
 // Will handle canvas tags straight up or as properties of
-const copy = (source, target, sourceX, sourceY, dx, dy, width, height) => {
+const copy = (source, target, sourceX, sourceY, tx, ty, width, height) => {
   const sx = sourceX || 0;
   const sy = sourceY || 0;
 
@@ -13,7 +13,7 @@ const copy = (source, target, sourceX, sourceY, dx, dy, width, height) => {
   const w = (width || source.width) - sx;
   const h = (height || source.height) - sy;
 
-  t.getContext('2d').drawImage(s, sx, sy, w, h, dx || 0, dy || 0, w, h);
+  t.getContext('2d').drawImage(s, sx, sy, w, h, tx || 0, ty || 0, w, h);
 };
 
 // Bundle methods and data

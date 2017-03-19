@@ -1,3 +1,8 @@
+noscript {
+  margin: 6px;
+  font: italic 12px/28px arial, sans-serif;
+}
+
 html {
   overflow: scroll;
 }
@@ -8,22 +13,20 @@ figure {
   margin: 0;
 }
 
-noscript {
-  margin: 6px;
-  font: italic 12px/28px arial, sans-serif;
-}
-
 figure {
-  top: 50%;
-  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 640px;
   height: 360px;
-  margin-top: -180px;
   position: absolute;
 }
 
 figcaption {
   font-size: 90%;
-  margin-top: 0.5rem;
+  margin: 0.5rem 0;
 }
 
 figcaption p {
@@ -32,8 +35,8 @@ figcaption p {
 
 canvas {
   display: block;
-  background: #000;
   min-height: 100%;
+  background: #000;
 }
 
 .is-iframe {

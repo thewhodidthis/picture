@@ -19,7 +19,7 @@ var Picture = (function () {
     t.getContext('2d').drawImage(s, sx, sy, w, h, tx || 0, ty || 0, w, h);
   };
 
-  // Bundle methods and data
+  // Bundle methods, options, and defaults
   var Picture = function Picture(w, h, c) {
     var width = w || 500;
     var height = h || 300;

@@ -12,8 +12,8 @@ document.head.appendChild(linkTag);
 test('will default', (t) => {
   const picture = Picture();
 
-  t.equals(picture.width, 500);
-  t.equals(picture.height, 300);
+  t.equals(picture.canvas.width, 0);
+  t.equals(picture.canvas.height, 0);
   t.end();
 });
 

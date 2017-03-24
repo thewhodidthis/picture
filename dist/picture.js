@@ -10,9 +10,9 @@ var Picture = (function () {
   var render = function render(source, target, sx, sy, tx, ty) {
     var s = source.canvas || source;
     var t = target.canvas || target;
+    var w = s.width - (sx || 0),
+        h = s.height - (sy || 0);
 
-    var w = s.width - (sx || 0);
-    var h = s.height - (sy || 0);
 
     t.getContext('2d').drawImage(s, sx, sy, w, h, tx || 0, ty || 0, w, h);
   };

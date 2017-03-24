@@ -7,9 +7,7 @@ const canvas = document.createElement('canvas');
 const render = (source, target, sx, sy, tx, ty) => {
   const s = source.canvas || source;
   const t = target.canvas || target;
-
-  const w = s.width - (sx || 0);
-  const h = s.height - (sy || 0);
+  const [w, h] = [s.width - (sx || 0), s.height - (sy || 0)];
 
   t.getContext('2d').drawImage(s, sx, sy, w, h, tx || 0, ty || 0, w, h);
 };

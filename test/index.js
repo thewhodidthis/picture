@@ -10,10 +10,11 @@ linkTag.href = 'data:;base64,iVBORw0KGgo=';
 document.head.appendChild(linkTag);
 
 test('will default', (t) => {
-  const picture = Picture();
+  const p1 = Picture(20);
+  const p2 = Picture();
 
-  t.equals(picture.canvas.width, 0);
-  t.equals(picture.canvas.height, 0);
+  t.equals(p1.canvas.height, 20);
+  t.equals(p2.canvas.height, 0);
   t.end();
 });
 

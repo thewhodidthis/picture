@@ -9,10 +9,11 @@ var Picture = (function () {
 
   // ```CanvasRenderingContext2D.drawImage``` wrapper
   var paste = function paste(source, target, sourceX, sourceY, targetX, targetY) {
-    // Assume the source object is a canvas rendering context or a picture
-    // Otherwise assume the source object is a canvas element
+    // Assume the source/target object is a canvas rendering context or a picture
+    // Otherwise assume the source/target object is a canvas element
     var s = source.canvas || source;
     var t = target.canvas || target;
+    var context = t.getContext('2d');
 
     // Avoid default params for now
     var sx = sourceX || 0;
@@ -20,17 +21,21 @@ var Picture = (function () {
     var tx = targetX || 0;
     var ty = targetY || 0;
 
-    // Just because, no penalties here
+    // Apparently no penalties over here
     var w = s.width - sx,
         h = s.height - sy;
 
+    // Wipe
 
-    t.getContext('2d').drawImage(s, sx, sy, w, h, tx, ty, w, h);
+    context.clearRect(0, 0, w, h);
+
+    // Draw
+    context.drawImage(s, sx, sy, w, h, tx, ty, w, h);
   };
 
   // Offscreen canvas wrapper
-  var createCanvas = function createCanvas(width, height) {
-    // Create and resize at the same time
+  var createPicture = function createPicture(width, height) {
+    // Create and resize in parallel
     // Attempt at "squaring off" if height argument missing
     var canvas = merge(document.createElement('canvas'), { width: width, height: height || width });
 
@@ -41,23 +46,27 @@ var Picture = (function () {
   };
 
   // My factory
-  // Bundle methods, options, and defaults
   var Picture = function Picture(width, height) {
     // Canvas and context references tucked inside of here
-    var canvas = createCanvas(width, height);
+    var picture = createPicture(width, height);
 
+    // Bundle methods, options, and defaults
     return merge({
+      // In
       source: function source(_source, x, y) {
-        paste(_source, canvas, x, y);
+        paste(_source, picture, x, y);
 
         return this;
       },
+
+
+      // Out
       target: function target(_target, x, y) {
-        paste(canvas, _target, 0, 0, x, y);
+        paste(picture, _target, 0, 0, x, y);
 
         return this;
       }
-    }, canvas);
+    }, picture);
   };
 
   return Picture;

@@ -3,9 +3,6 @@
 // # Picture
 // 2d canvas context helpers
 
-// Uglification friendly shorthand
-var merge = Object.assign;
-
 // ```CanvasRenderingContext2D.drawImage``` wrapper
 var paste = function paste(source, target, sourceX, sourceY, targetX, targetY) {
   // Assume the source/target object is a canvas rendering context or a picture
@@ -26,34 +23,26 @@ var paste = function paste(source, target, sourceX, sourceY, targetX, targetY) {
 
   // Wipe
 
-  context.clearRect(0, 0, w, h);
+  context.clearRect(tx, ty, w, h);
 
   // Draw
   context.drawImage(s, sx, sy, w, h, tx, ty, w, h);
 };
 
-// Offscreen canvas wrapper
-var createPicture = function createPicture(width, height) {
-  // Create and resize in parallel
-  // Attempt at "squaring off" if height argument missing
-  var canvas = merge(document.createElement('canvas'), { width: width, height: height || width });
-
-  return {
-    canvas: canvas,
-    context: canvas.getContext('2d')
-  };
-};
-
 // My factory
-var Picture = function Picture(width, height) {
-  // Canvas and context references tucked inside of here
-  var picture = createPicture(width, height);
+var Picture = function Picture(width, h) {
+  // Create and resize offscreen canvas
+  // Attempt at "squaring off" if height argument missing
+  var canvas = Object.assign(document.createElement('canvas'), { width: width, height: h || width });
 
   // Bundle methods, options, and defaults
-  return merge({
+  return {
+    canvas: canvas,
+    context: canvas.getContext('2d'),
+
     // In
     source: function source(_source, x, y) {
-      paste(_source, picture, x, y);
+      paste(_source, canvas, x, y);
 
       return this;
     },
@@ -61,11 +50,11 @@ var Picture = function Picture(width, height) {
 
     // Out
     target: function target(_target, x, y) {
-      paste(picture, _target, 0, 0, x, y);
+      paste(canvas, _target, 0, 0, x, y);
 
       return this;
     }
-  }, picture);
+  };
 };
 
 module.exports = Picture;

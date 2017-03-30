@@ -1,9 +1,6 @@
 // # Picture
 // 2d canvas context helpers
 
-// Uglification friendly shorthand
-const merge = Object.assign;
-
 // ```CanvasRenderingContext2D.drawImage``` wrapper
 const paste = (source, target, sourceX, sourceY, targetX, targetY) => {
   // Assume the source/target object is a canvas rendering context or a picture
@@ -22,45 +19,37 @@ const paste = (source, target, sourceX, sourceY, targetX, targetY) => {
   const [w, h] = [s.width - sx, s.height - sy];
 
   // Wipe
-  context.clearRect(0, 0, w, h);
+  context.clearRect(tx, ty, w, h);
 
   // Draw
   context.drawImage(s, sx, sy, w, h, tx, ty, w, h);
 };
 
-// Offscreen canvas wrapper
-const createPicture = (width, height) => {
-  // Create and resize in parallel
+// My factory
+const Picture = (width, h) => {
+  // Create and resize offscreen canvas
   // Attempt at "squaring off" if height argument missing
-  const canvas = merge(document.createElement('canvas'), { width, height: height || width });
+  const canvas = Object.assign(document.createElement('canvas'), { width, height: h || width });
 
+  // Bundle methods, options, and defaults
   return {
     canvas,
     context: canvas.getContext('2d'),
-  };
-};
 
-// My factory
-const Picture = (width, height) => {
-  // Canvas and context references tucked inside of here
-  const picture = createPicture(width, height);
-
-  // Bundle methods, options, and defaults
-  return merge({
     // In
     source(source, x, y) {
-      paste(source, picture, x, y);
+      paste(source, canvas, x, y);
 
       return this;
     },
 
     // Out
     target(target, x, y) {
-      paste(picture, target, 0, 0, x, y);
+      paste(canvas, target, 0, 0, x, y);
 
       return this;
     },
-  }, picture);
+  };
 };
 
 export default Picture;

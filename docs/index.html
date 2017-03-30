@@ -40,22 +40,6 @@
             <div class="pilwrap">
               <a class="pilcrow" href="#section-2">&#182;</a>
             </div>
-            <p>Uglification friendly shorthand</p>
-
-          </div>
-
-          
-          <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> merge = <span class="hljs-built_in">Object</span>.assign;</pre></div></div>
-          
-        </li>
-        
-        
-        <li id="section-3" class="section">
-          <div class="annotation">
-            
-            <div class="pilwrap">
-              <a class="pilcrow" href="#section-3">&#182;</a>
-            </div>
             <p><code>CanvasRenderingContext2D.drawImage</code> wrapper</p>
 
           </div>
@@ -66,11 +50,11 @@
         </li>
         
         
-        <li id="section-4" class="section">
+        <li id="section-3" class="section">
           <div class="annotation">
             
             <div class="pilwrap">
-              <a class="pilcrow" href="#section-4">&#182;</a>
+              <a class="pilcrow" href="#section-3">&#182;</a>
             </div>
             <p>Assume the source/target object is a canvas rendering context or a picture
 Otherwise assume the source/target object is a canvas element</p>
@@ -79,16 +63,17 @@ Otherwise assume the source/target object is a canvas element</p>
 
           
           <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> s = source.canvas || source;
-  <span class="hljs-keyword">const</span> t = target.canvas || target;</pre></div></div>
+  <span class="hljs-keyword">const</span> t = target.canvas || target;
+  <span class="hljs-keyword">const</span> context = t.getContext(<span class="hljs-string">'2d'</span>);</pre></div></div>
           
         </li>
         
         
-        <li id="section-5" class="section">
+        <li id="section-4" class="section">
           <div class="annotation">
             
             <div class="pilwrap">
-              <a class="pilcrow" href="#section-5">&#182;</a>
+              <a class="pilcrow" href="#section-4">&#182;</a>
             </div>
             <p>Avoid default params for now</p>
 
@@ -103,21 +88,34 @@ Otherwise assume the source/target object is a canvas element</p>
         </li>
         
         
-        <li id="section-6" class="section">
+        <li id="section-5" class="section">
           <div class="annotation">
             
             <div class="pilwrap">
-              <a class="pilcrow" href="#section-6">&#182;</a>
+              <a class="pilcrow" href="#section-5">&#182;</a>
             </div>
             <p>Apparently no penalties over here</p>
 
           </div>
 
           
-          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> [w, h] = [s.width - sx, s.height - sy];
+          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> [w, h] = [s.width - sx, s.height - sy];</pre></div></div>
+          
+        </li>
+        
+        
+        <li id="section-6" class="section">
+          <div class="annotation">
+            
+            <div class="pilwrap">
+              <a class="pilcrow" href="#section-6">&#182;</a>
+            </div>
+            <p>Wipe</p>
 
-  t.getContext(<span class="hljs-string">'2d'</span>).drawImage(s, sx, sy, w, h, tx, ty, w, h);
-};</pre></div></div>
+          </div>
+
+          
+          <div class="content"><div class='highlight'><pre>  context.clearRect(tx, ty, w, h);</pre></div></div>
           
         </li>
         
@@ -128,12 +126,13 @@ Otherwise assume the source/target object is a canvas element</p>
             <div class="pilwrap">
               <a class="pilcrow" href="#section-7">&#182;</a>
             </div>
-            <p>Offscreen canvas wrapper</p>
+            <p>Draw</p>
 
           </div>
 
           
-          <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> createCanvas = <span class="hljs-function">(<span class="hljs-params">width, height</span>) =&gt;</span> {</pre></div></div>
+          <div class="content"><div class='highlight'><pre>  context.drawImage(s, sx, sy, w, h, tx, ty, w, h);
+};</pre></div></div>
           
         </li>
         
@@ -144,19 +143,12 @@ Otherwise assume the source/target object is a canvas element</p>
             <div class="pilwrap">
               <a class="pilcrow" href="#section-8">&#182;</a>
             </div>
-            <p>Create and resize in parallel
-Attempt at “squaring off” if height argument missing</p>
+            <p>My factory</p>
 
           </div>
 
           
-          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> canvas = merge(<span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'canvas'</span>), { width, <span class="hljs-attr">height</span>: height || width });
-
-  <span class="hljs-keyword">return</span> {
-    canvas,
-    <span class="hljs-attr">context</span>: canvas.getContext(<span class="hljs-string">'2d'</span>),
-  };
-};</pre></div></div>
+          <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> Picture = <span class="hljs-function">(<span class="hljs-params">width, h</span>) =&gt;</span> {</pre></div></div>
           
         </li>
         
@@ -167,12 +159,13 @@ Attempt at “squaring off” if height argument missing</p>
             <div class="pilwrap">
               <a class="pilcrow" href="#section-9">&#182;</a>
             </div>
-            <p>My factory</p>
+            <p>Create and resize offscreen canvas
+Attempt at “squaring off” if height argument missing</p>
 
           </div>
 
           
-          <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> Picture = <span class="hljs-function">(<span class="hljs-params">width, height</span>) =&gt;</span> {</pre></div></div>
+          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> canvas = <span class="hljs-built_in">Object</span>.assign(<span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'canvas'</span>), { width, <span class="hljs-attr">height</span>: h || width });</pre></div></div>
           
         </li>
         
@@ -183,12 +176,14 @@ Attempt at “squaring off” if height argument missing</p>
             <div class="pilwrap">
               <a class="pilcrow" href="#section-10">&#182;</a>
             </div>
-            <p>Canvas and context references tucked inside of here</p>
+            <p>Bundle methods, options, and defaults</p>
 
           </div>
 
           
-          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> canvas = createCanvas(width, height);</pre></div></div>
+          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> {
+    canvas,
+    <span class="hljs-attr">context</span>: canvas.getContext(<span class="hljs-string">'2d'</span>),</pre></div></div>
           
         </li>
         
@@ -198,22 +193,6 @@ Attempt at “squaring off” if height argument missing</p>
             
             <div class="pilwrap">
               <a class="pilcrow" href="#section-11">&#182;</a>
-            </div>
-            <p>Bundle methods, options, and defaults</p>
-
-          </div>
-
-          
-          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> merge({</pre></div></div>
-          
-        </li>
-        
-        
-        <li id="section-12" class="section">
-          <div class="annotation">
-            
-            <div class="pilwrap">
-              <a class="pilcrow" href="#section-12">&#182;</a>
             </div>
             <p>In</p>
 
@@ -229,11 +208,11 @@ Attempt at “squaring off” if height argument missing</p>
         </li>
         
         
-        <li id="section-13" class="section">
+        <li id="section-12" class="section">
           <div class="annotation">
             
             <div class="pilwrap">
-              <a class="pilcrow" href="#section-13">&#182;</a>
+              <a class="pilcrow" href="#section-12">&#182;</a>
             </div>
             <p>Out</p>
 
@@ -245,7 +224,7 @@ Attempt at “squaring off” if height argument missing</p>
 
       <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
     },
-  }, canvas);
+  };
 };
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> Picture;</pre></div></div>

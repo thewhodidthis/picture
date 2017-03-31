@@ -1,66 +1,135 @@
 'use strict';
 
-var html = document.documentElement;
-var canvas = document.getElementById('canvas');
-var sprite = document.createElement('img');
+const TAU = Math.PI * 2;
 
-var w = 800;
-var h = 600;
-var x = (canvas.width - w) * 0.5;
-var y = (canvas.height - h) * 0.5;
-var count = 0;
+const Loop = (callback) => {
+  let frameId;
 
-var keyout = {
-  filter: function() {
-    var w = this.width;
-    var h = this.height;
+  const play = (fn) => window.requestAnimationFrame(fn);
+  const stop = () => window.cancelAnimationFrame(frameId);
+  const loop = t => {
+    callback(frameId);
 
-    var output = this.context.getImageData(0, 0, w, h);
-    var outputData = output.data;
-
-    for (var i = 0, stop = outputData.length; i < stop; i += 4) {
-      var r = outputData[i];
-      var g = outputData[i+1];
-      var b = outputData[i+2];
-      var a = outputData[i+3];
-
-      outputData[i+2] = outputData[i];
-      outputData[i+3] = (outputData[i+2] == 255) ? 0 : a;
+    if (frameId) {
+      frameId = play(loop);
     }
+  };
 
-    this.context.putImageData(output, 0, 0);
-
-    return this;
-  }
+  // On/Off
+  return () => {
+    frameId = (frameId === undefined) ? play(loop) : stop();
+  };
 };
 
-var master = Picture(w, h);
-var output = Object.assign(master, keyout);
+// https://en.wikipedia.org/wiki/Regular_polygon
+const Poly = (size, n = 5) => {
+  const center = size * 0.5;
 
-var draw = function() {
-  master.source(sprite).target(canvas, x, y);
+  // So I can use with `Array.map()` straight away
+  const points = Array.from({ length: n }).map((point, i) => {
+    const a = (i * TAU) / n;
+    const x = center * Math.cos(a);
+    const y = center * Math.sin(a);
+
+    return { x, y };
+  });
+
+  return points;
 };
 
-var pimp = function() {
-  output.filter().target(canvas, x, y);
-}
+const Star = (size, n, m = 2) => {
+  // This is only accurate for the sizes I'm interested in right here
+  const isDegenerate = n % m === 0;
+
+  const points = Poly(size, n);
+  const output = Array.from({ length: n * m }).map((v, i) => {
+    const j = i * m;
+    const k = isDegenerate ? (j + j % m) / m : 0;
+    const x = (k + j) % n;
+
+    return points[x];
+  });
+
+  return output;
+};
+
+const Node = (size, r) => {
+  const picture = Picture(size);
+  const context = picture.context;
+  const connect = p => context.lineTo(p.x, p.y);
+
+  const center = size * 0.5;
+
+  const render = (details, i) => {
+    context.rotate(r * (i + 1));
+    context.beginPath();
+
+    details.forEach(connect);
+
+    context.closePath();
+    context.stroke();
+  };
+
+  return Object.assign({
+    render(details, i) {
+      context.strokeStyle = '#fff';
+
+      context.save();
+      context.translate(center, center);
+
+      details.forEach(render);
+
+      context.restore();
+
+      return this;
+    },
+  }, picture);
+};
+
+const canvas = document.getElementById('canvas');
+const [w, h] = [canvas.width, canvas.height];
+const master = Picture(w, h);
+const center = {
+  x: w * 0.5,
+  y: h * 0.5,
+};
+
+const getSize = (size, n) => size * Math.cos(Math.PI / n);
+
+// Corners
+const sizes = [150, 150, 150, 150];
+const polys = [7, 5, 4, 3].map((n, i) => Poly(getSize(90, n) - i * 10, n));
+
+// Core
+const stars = [9, 5].map((n, i) => Star(getSize(180 - i * 20, n), n));
+
+const draw = (frame) => {
+  const r = 0.0125 * frame;
+
+  const roses = sizes.map(size => Node(size, r));
+
+  roses.forEach((rose, i) => {
+    const s = rose.canvas.width;
+    const l = (i % 2) * (w - s);
+    const t = Math.floor(i * 0.5) * (h - s);
+
+    rose.render(polys).target(master, l, t);
+  });
+
+  const [x, y] = [center.x - (180 * 0.5), center.y - (180 * 0.5)];
+  const focus = Node(180, r);
+
+  focus.render(stars).target(master, x, y);
+};
+
+canvas.parentNode.replaceChild(master.canvas, canvas);
 
 if (window !== window.top) {
-  html.className = html.className + ' is-iframe';
+  document.documentElement.className = 'is-iframe';
 }
 
-sprite.addEventListener('load', draw, false);
-sprite.setAttribute('src', 'sprite.jpg');
+const loop = Loop(draw);
 
-canvas.addEventListener('click', function _onClick(e) {
-  e.preventDefault();
-
-  if (count % 2 === 0) {
-    pimp();
-  } else {
-    draw();
-  }
-
-  count += 1;
-}, false)
+document.addEventListener('click', loop);
+window.addEventListener('load', loop);
 

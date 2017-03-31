@@ -1,7 +1,7 @@
 // # Picture
 // 2d canvas context helpers
 
-// ```CanvasRenderingContext2D.drawImage``` wrapper
+// `CanvasRenderingContext2D.drawImage` wrapper
 const paste = (source, target, sourceX, sourceY, targetX, targetY) => {
   // Assume the source/target object is a canvas rendering context or a picture
   // Otherwise assume the source/target object is a canvas element

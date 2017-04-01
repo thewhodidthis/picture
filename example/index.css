@@ -19,14 +19,16 @@ figure {
   right: 0;
   bottom: 0;
   margin: auto;
-  width: 640px;
-  height: 360px;
+  width: 480px;
+  height: 320px;
   position: absolute;
+  border: 1px solid #eee;
 }
 
 figcaption {
   font-size: 90%;
-  margin: 0.5rem 0;
+  text-align: center;
+  margin-top: 0.5rem;
 }
 
 figcaption p {
@@ -35,8 +37,6 @@ figcaption p {
 
 canvas {
   display: block;
-  min-height: 100%;
-  background: #000;
 }
 
 .is-iframe {
@@ -46,6 +46,7 @@ canvas {
 .is-iframe figure {
   top: 0;
   margin: 0;
+  border: 0;
 }
 
 .is-iframe figcaption {

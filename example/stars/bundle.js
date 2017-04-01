@@ -101,8 +101,6 @@ var Poly = function Poly(size) {
   return points;
 };
 
-var colors = [];
-
 var Rose = function Rose(size, r) {
   var picture = Picture(size);
   var context = picture.context;
@@ -110,6 +108,7 @@ var Rose = function Rose(size, r) {
     return context.lineTo(p.x, p.y);
   };
 
+  var colors = ['#000'];
   var center = size * 0.5;
   var _render = function _render(details, i) {
     context.rotate(r);
@@ -127,7 +126,9 @@ var Rose = function Rose(size, r) {
 
   var output = {
     render: function render(details) {
-      colors = ['#000', context.fillStyle];
+      if (context.fillStyle !== colors[0]) {
+        colors.push(context.fillStyle);
+      }
 
       context.save();
       context.translate(center, center);
@@ -189,9 +190,9 @@ var toggle = Loop(function (frame) {
   shapes.map(function (shape, i) {
     return Rose(size, i % 2 ? r + i * 0.5 : -r);
   }).forEach(function (rose, i) {
+    var p = shapes[i];
     var x = i * size;
     var y = (300 - size) * 0.5;
-    var p = shapes[i];
 
     rose.context.strokeStyle = '#fff';
     rose.render(p).target(master, x, y);

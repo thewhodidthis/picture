@@ -1,12 +1,11 @@
 import Picture from '../../index.es';
 
-let colors = [];
-
 const Rose = (size, r) => {
   const picture = Picture(size);
   const context = picture.context;
   const connect = p => context.lineTo(p.x, p.y);
 
+  const colors = ['#000'];
   const center = size * 0.5;
   const render = (details, i) => {
     context.rotate(r);
@@ -24,7 +23,9 @@ const Rose = (size, r) => {
 
   const output = {
     render(details) {
-      colors = ['#000', context.fillStyle];
+      if (context.fillStyle !== colors[0]) {
+        colors.push(context.fillStyle);
+      }
 
       context.save();
       context.translate(center, center);

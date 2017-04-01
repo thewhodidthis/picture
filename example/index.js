@@ -51,7 +51,6 @@ const Node = (size, r) => {
     details.forEach(connect);
 
     context.closePath();
-
     context.fillStyle = i % 2 ? '#fff' : '#000';
     context.fill();
   };
@@ -84,7 +83,7 @@ const getR = (i, s = 90, p = 5) => s - ((p * i) + i);
 
 const layers = Array.from({ length: 18 });
 const shapes = seed.map((n, j) => layers.map((v, i) => Poly(getR(i), n)));
-const update = Loop((frame) => {
+const toggle = Loop((frame) => {
   const r = 0.01 * frame;
 
   // Tiles
@@ -103,6 +102,6 @@ if (window !== window.top) {
   document.documentElement.className = 'is-iframe';
 }
 
-document.addEventListener('click', update);
-window.addEventListener('load', update);
+document.addEventListener('click', toggle);
+window.addEventListener('load', toggle);
 

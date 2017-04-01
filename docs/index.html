@@ -63,7 +63,8 @@ Otherwise assume the source/target object is a canvas element</p>
 
           
           <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> s = source.canvas || source;
-  <span class="hljs-keyword">const</span> t = target.canvas || target;</pre></div></div>
+  <span class="hljs-keyword">const</span> t = target.canvas || target;
+  <span class="hljs-keyword">const</span> context = t.getContext(<span class="hljs-string">'2d'</span>);</pre></div></div>
           
         </li>
         
@@ -98,9 +99,7 @@ Otherwise assume the source/target object is a canvas element</p>
           </div>
 
           
-          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> [w, h] = [s.width - sx, s.height - sy];
-
-  <span class="hljs-keyword">const</span> context = t.getContext(<span class="hljs-string">'2d'</span>);</pre></div></div>
+          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> [w, h] = [s.width - sx, s.height - sy];</pre></div></div>
           
         </li>
         

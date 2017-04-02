@@ -3,8 +3,7 @@
 
 // `CanvasRenderingContext2D.drawImage` wrapper
 const paste = (source, target, sourceX, sourceY, targetX, targetY) => {
-  // Assume the source/target object is a canvas rendering context or a picture
-  // Otherwise assume the source/target object is a canvas element
+  // Decide whether source/target objects are canvas elements or context-like
   const s = source.canvas || source;
   const t = target.canvas || target;
   const context = t.getContext('2d');
@@ -15,7 +14,7 @@ const paste = (source, target, sourceX, sourceY, targetX, targetY) => {
   const tx = targetX || 0;
   const ty = targetY || 0;
 
-  // Apparently no penalties over here
+  // Apparently no transpile penalties over here
   const [w, h] = [s.width - sx, s.height - sy];
 
   // Wipe
@@ -31,7 +30,7 @@ const Picture = (width, h) => {
   // Attempt at "squaring off" if height argument missing
   const canvas = Object.assign(document.createElement('canvas'), { width, height: h || width });
 
-  // Bundle methods, options, and defaults
+  // Bundle
   return {
     canvas,
     context: canvas.getContext('2d'),

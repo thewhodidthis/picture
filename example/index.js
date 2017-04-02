@@ -5,27 +5,36 @@ import Poly from './lib/poly.js';
 import Rose from './lib/rose.js';
 
 const canvas = document.getElementById('canvas');
-const [w, h] = [canvas.width, canvas.height];
-const master = Picture(w, h);
+const master = Picture(canvas.width, canvas.height);
+
+const getR = (i, s, p) => s - ((p * i) + i);
 
 const grid = 3;
 const size = 160;
-const seed = [4, 3, 5];
-const getR = (i, s = 130, p = 5) => s - ((p * i) + i);
+const data = [4, 3, 5];
 
+const colors = ['#000', '#fff'];
 const layers = Array.from({ length: 22 });
-const shapes = seed.map((n, j) => layers.map((v, i) => Poly(getR(i), n)));
+const shapes = data.map((n, j) => layers.map((v, i) => Poly(getR(i, 130, 5), n)));
 const toggle = Loop((frame) => {
   const r = 0.008 * frame;
 
-  shapes.map((shape, i) => Rose(size, i % 2 ? r + (i * 0.5) : -r)).forEach((rose, i) => {
-    const p = shapes[i];
+  shapes.forEach((layers, i) => {
+    // Make a picture for each shape
+    const rose = Rose(size);
+
+    // Position within master canvas
     const x = i * size;
     const y = (300 - size) * 0.5;
 
-    rose.context.fillStyle = '#fff';
+    // Calculate base angle for each shape
+    const a = i % 2 ? r + (i * 0.5) : -r;
+
+    // No stroke
     rose.context.strokeStyle = 'transparent';
-    rose.render(p).target(master, x, y);
+
+    // Cache shape, paste onto master
+    rose.render(layers, colors, a).target(master, x, y);
   });
 });
 

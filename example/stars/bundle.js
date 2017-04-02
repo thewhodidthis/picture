@@ -5,25 +5,22 @@
 // 2d canvas context helpers
 
 // `CanvasRenderingContext2D.drawImage` wrapper
-var paste = function paste(source, target, sourceX, sourceY, targetX, targetY) {
-  // Assume the source/target object is a canvas rendering context or a picture
-  // Otherwise assume the source/target object is a canvas element
-  var s = source.canvas || source;
-  var t = target.canvas || target;
-  var context = t.getContext('2d');
+const paste = (source, target, sourceX, sourceY, targetX, targetY) => {
+  // Decide whether source/target objects are canvas elements or context-like
+  const s = source.canvas || source;
+  const t = target.canvas || target;
+  const context = t.getContext('2d');
 
   // Avoid default params for now
-  var sx = sourceX || 0;
-  var sy = sourceY || 0;
-  var tx = targetX || 0;
-  var ty = targetY || 0;
+  const sx = sourceX || 0;
+  const sy = sourceY || 0;
+  const tx = targetX || 0;
+  const ty = targetY || 0;
 
-  // Apparently no penalties over here
-  var w = s.width - sx,
-      h = s.height - sy;
+  // Apparently no transpile penalties over here
+  const [w, h] = [s.width - sx, s.height - sy];
 
   // Wipe
-
   context.clearRect(tx, ty, w, h);
 
   // Draw
@@ -31,43 +28,38 @@ var paste = function paste(source, target, sourceX, sourceY, targetX, targetY) {
 };
 
 // My factory
-var Picture = function Picture(width, h) {
+const Picture = (width, h) => {
   // Create and resize offscreen canvas
   // Attempt at "squaring off" if height argument missing
-  var canvas = Object.assign(document.createElement('canvas'), { width: width, height: h || width });
+  const canvas = Object.assign(document.createElement('canvas'), { width, height: h || width });
 
-  // Bundle methods, options, and defaults
+  // Bundle
   return {
-    canvas: canvas,
+    canvas,
     context: canvas.getContext('2d'),
 
     // In
-    source: function source(_source, x, y) {
-      paste(_source, canvas, x, y);
+    source(source, x, y) {
+      paste(source, canvas, x, y);
 
       return this;
     },
 
-
     // Out
-    target: function target(_target, x, y) {
-      paste(canvas, _target, 0, 0, x, y);
+    target(target, x, y) {
+      paste(canvas, target, 0, 0, x, y);
 
       return this;
-    }
+    },
   };
 };
 
-var Loop = function Loop(callback) {
-  var frameId = void 0;
+const Loop = (callback) => {
+  let frameId;
 
-  var play = function play(fn) {
-    return window.requestAnimationFrame(fn);
-  };
-  var stop = function stop() {
-    return window.cancelAnimationFrame(frameId);
-  };
-  var loop = function loop() {
+  const play = fn => window.requestAnimationFrame(fn);
+  const stop = () => window.cancelAnimationFrame(frameId);
+  const loop = () => {
     callback(frameId);
 
     if (frameId) {
@@ -76,86 +68,70 @@ var Loop = function Loop(callback) {
   };
 
   // On/Off
-  return function () {
-    frameId = frameId === undefined ? play(loop) : stop();
+  return () => {
+    frameId = (frameId === undefined) ? play(loop) : stop();
   };
 };
 
-var TAU = Math.PI * 2;
+const TAU = Math.PI * 2;
 
-var Poly = function Poly(size) {
-  var n = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5;
-
-  var center = size * 0.5;
+const Poly = (size, n) => {
+  const center = size * 0.5;
 
   // So I can use with `Array.map()` straight away
-  var points = Array.from({ length: n }).map(function (point, i) {
+  const points = Array.from({ length: n || 5 }).map((point, i) => {
     // https://en.wikipedia.org/wiki/Regular_polygon
-    var a = i * TAU / n;
-    var x = center * Math.cos(a);
-    var y = center * Math.sin(a);
+    const a = (i * TAU) / n;
+    const x = center * Math.cos(a);
+    const y = center * Math.sin(a);
 
-    return { x: x, y: y };
+    return { x, y };
   });
 
   return points;
 };
 
-var Rose = function Rose(size, r) {
-  var picture = Picture(size);
-  var context = picture.context;
-  var connect = function connect(p) {
-    return context.lineTo(p.x, p.y);
-  };
+const Rose = (size) => {
+  const picture = Picture(size);
+  const center = size * 0.5;
+  const rose = {
+    render(layers, colors, rot) {
+      this.context.save();
+      this.context.translate(center, center);
 
-  var colors = ['#000'];
-  var center = size * 0.5;
-  var _render = function _render(details, i) {
-    context.rotate(r);
-    context.beginPath();
+      layers.forEach((points, i) => {
+        this.context.rotate(rot);
+        this.context.beginPath();
 
-    // The points
-    details.forEach(connect);
+        points.forEach((p) => {
+          this.context.lineTo(p.x, p.y);
+        });
 
-    context.closePath();
-    context.stroke();
+        this.context.closePath();
+        this.context.stroke();
 
-    context.fillStyle = colors[i % colors.length];
-    context.fill();
-  };
+        this.context.fillStyle = colors[i % colors.length];
+        this.context.fill();
+      });
 
-  var output = {
-    render: function render(details) {
-      if (context.fillStyle !== colors[0]) {
-        colors.push(context.fillStyle);
-      }
-
-      context.save();
-      context.translate(center, center);
-
-      // The shapes
-      details.forEach(_render);
-
-      context.restore();
+      this.context.restore();
 
       return this;
-    }
+    },
   };
 
-  return Object.assign(picture, output);
+  return Object.assign(picture, rose);
 };
 
-var Star = function Star(size, n) {
-  var m = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
-
+const Star = (size, n, m = 2) => {
   // This is only accurate for the sizes I'm interested in right here
-  var isDegenerate = n % m === 0;
+  const isDegenerate = n % m === 0;
 
-  var points = Poly(size, n);
-  var output = Array.from({ length: n * m }).map(function (v, i) {
-    var j = i * m;
-    var k = isDegenerate ? (j + j % m) / m : 0;
-    var x = (k + j) % n;
+  const points = Poly(size, n);
+  const output = Array.from({ length: n * m }).map((v, i) => {
+    const j = i * m;
+    const k = isDegenerate ? (j + j % m) / m : 0;
+    const x = (k + j) % n;
 
     return points[x];
   });
@@ -163,39 +139,28 @@ var Star = function Star(size, n) {
   return output;
 };
 
-var canvas = document.getElementById('canvas');
-var _ref = [canvas.width, canvas.height];
-var w = _ref[0];
-var h = _ref[1];
+const canvas = document.getElementById('canvas');
+const master = Picture(canvas.width, canvas.height);
 
-var master = Picture(w, h);
+const getR = (i, s, p) => s - ((p * i) + i);
 
-var size = 250;
-var seed = [7, 5];
-var getR = function getR(i) {
-  var s = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 200;
-  var p = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 7;
-  return s - (p * i + i);
-};
+const size = 250;
+const data = [7, 5];
 
-var layers = Array.from({ length: 21 });
-var shapes = seed.map(function (n, j) {
-  return layers.map(function (v, i) {
-    return Star(getR(i), n);
-  });
-});
-var toggle = Loop(function (frame) {
-  var r = 0.0025 * frame;
+const colors = ['#000'];
+const layers = Array.from({ length: 21 });
+const shapes = data.map((n, j) => layers.map((v, i) => Star(getR(i, 200, 7), n)));
+const toggle = Loop((frame) => {
+  const r = 0.0025 * frame;
 
-  shapes.map(function (shape, i) {
-    return Rose(size, i % 2 ? r + i * 0.5 : -r);
-  }).forEach(function (rose, i) {
-    var p = shapes[i];
-    var x = i * size;
-    var y = (300 - size) * 0.5;
+  shapes.forEach((layers, i) => {
+    const rose = Rose(size);
+    const a = i ? r + i : -r;
+    const x = i * size;
+    const y = (300 - size) * 0.5;
 
     rose.context.strokeStyle = '#fff';
-    rose.render(p).target(master, x, y);
+    rose.render(layers, colors, a).target(master, x, y);
   });
 });
 

@@ -6,8 +6,7 @@ var Picture = (function () {
 
   // `CanvasRenderingContext2D.drawImage` wrapper
   var paste = function paste(source, target, sourceX, sourceY, targetX, targetY) {
-    // Assume the source/target object is a canvas rendering context or a picture
-    // Otherwise assume the source/target object is a canvas element
+    // Decide whether source/target objects are canvas elements or context-like
     var s = source.canvas || source;
     var t = target.canvas || target;
     var context = t.getContext('2d');
@@ -18,7 +17,7 @@ var Picture = (function () {
     var tx = targetX || 0;
     var ty = targetY || 0;
 
-    // Apparently no penalties over here
+    // Apparently no transpile penalties over here
     var w = s.width - sx,
         h = s.height - sy;
 
@@ -36,7 +35,7 @@ var Picture = (function () {
     // Attempt at "squaring off" if height argument missing
     var canvas = Object.assign(document.createElement('canvas'), { width: width, height: h || width });
 
-    // Bundle methods, options, and defaults
+    // Bundle
     return {
       canvas: canvas,
       context: canvas.getContext('2d'),

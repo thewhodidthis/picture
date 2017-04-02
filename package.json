@@ -37,8 +37,8 @@
     "preexample": "npm start",
     "example": "npm run example:build && npm run example:serve",
     "example:push": "rsync -avruzLPC --exclude=.DS_Store ./example/ $npm_package_config_remote",
-    "example:build": "rollup -c rollup.example.js",
-    "example:build:stars": "rollup -c rollup.example.stars.js",
+    "example:build": "rollup -i example/index.js -o example/bundle.js -f iife",
+    "example:build:stars": "rollup -i example/stars/index.js -o example/stars/bundle.js -f iife",
     "example:serve": "php -S localhost:8000 -t example/",
     "build": "rollup -c",
     "build:min": "uglifyjs dist/picture.js -cm > dist/picture.min.js",
@@ -60,6 +60,7 @@
     "eslint-plugin-import": "latest",
     "rollup": "latest",
     "rollup-plugin-babel": "latest",
+    "rollup-watch": "latest",
     "tape": "latest",
     "testling": "latest",
     "uglify-js": "latest"

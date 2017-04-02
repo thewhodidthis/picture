@@ -21,26 +21,28 @@ const Star = (size, n, m = 2) => {
 };
 
 const canvas = document.getElementById('canvas');
-const [w, h] = [canvas.width, canvas.height];
-const master = Picture(w, h);
+const master = Picture(canvas.width, canvas.height);
+
+const getR = (i, s, p) => s - ((p * i) + i);
 
 const grid = 2;
 const size = 250;
-const seed = [7, 5];
-const getR = (i, s = 200, p = 7) => s - ((p * i) + i);
+const data = [7, 5];
 
+const colors = ['#000'];
 const layers = Array.from({ length: 21 });
-const shapes = seed.map((n, j) => layers.map((v, i) => Star(getR(i), n)));
+const shapes = data.map((n, j) => layers.map((v, i) => Star(getR(i, 200, 7), n)));
 const toggle = Loop((frame) => {
   const r = 0.0025 * frame;
 
-  shapes.map((shape, i) => Rose(size, i % 2 ? r + (i * 0.5) : -r)).forEach((rose, i) => {
-    const p = shapes[i];
+  shapes.forEach((layers, i) => {
+    const rose = Rose(size);
+    const a = i ? r + i : -r;
     const x = i * size;
     const y = (300 - size) * 0.5;
 
     rose.context.strokeStyle = '#fff';
-    rose.render(p).target(master, x, y);
+    rose.render(layers, colors, a).target(master, x, y);
   });
 });
 

@@ -26,7 +26,7 @@
               <a class="pilcrow" href="#section-1">&#182;</a>
             </div>
             <h1 id="picture">Picture</h1>
-<p>2d canvas context helpers</p>
+<p>Super minimal canvas helpers</p>
 
           </div>
 
@@ -109,7 +109,7 @@
             <div class="pilwrap">
               <a class="pilcrow" href="#section-6">&#182;</a>
             </div>
-            <p>Wipe</p>
+            <p>Wipe out</p>
 
           </div>
 
@@ -158,15 +158,14 @@
             <div class="pilwrap">
               <a class="pilcrow" href="#section-9">&#182;</a>
             </div>
-            <p>Create and resize offscreen canvas
-Attempt at “squaring off” if height argument missing</p>
+            <p>Create and resize offscreen canvas, square up if height missing</p>
 
           </div>
 
           
           <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> context = <span class="hljs-built_in">Object</span>.assign(<span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'canvas'</span>), {
     width,
-    <span class="hljs-attr">height</span>: h || width
+    <span class="hljs-attr">height</span>: h || width,
   }).getContext(<span class="hljs-string">'2d'</span>);</pre></div></div>
           
         </li>

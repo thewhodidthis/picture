@@ -1,7 +1,7 @@
 'use strict';
 
 // # Picture
-// 2d canvas context helpers
+// Super minimal canvas helpers
 
 // `CanvasRenderingContext2D.drawImage` wrapper
 var paste = function paste(source, target, sourceX, sourceY, targetX, targetY) {
@@ -20,7 +20,7 @@ var paste = function paste(source, target, sourceX, sourceY, targetX, targetY) {
   var w = s.width - sx,
       h = s.height - sy;
 
-  // Wipe
+  // Wipe out
 
   context.clearRect(tx, ty, w, h);
 
@@ -30,8 +30,7 @@ var paste = function paste(source, target, sourceX, sourceY, targetX, targetY) {
 
 // My factory
 var Picture = function Picture(width, h) {
-  // Create and resize offscreen canvas
-  // Attempt at "squaring off" if height argument missing
+  // Create and resize offscreen canvas, square up if height missing
   var context = Object.assign(document.createElement('canvas'), {
     width: width,
     height: h || width

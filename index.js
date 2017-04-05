@@ -32,16 +32,19 @@ var paste = function paste(source, target, sourceX, sourceY, targetX, targetY) {
 var Picture = function Picture(width, h) {
   // Create and resize offscreen canvas
   // Attempt at "squaring off" if height argument missing
-  var canvas = Object.assign(document.createElement('canvas'), { width: width, height: h || width });
+  var context = Object.assign(document.createElement('canvas'), {
+    width: width,
+    height: h || width
+  }).getContext('2d');
 
   // Bundle
   return {
-    canvas: canvas,
-    context: canvas.getContext('2d'),
+    context: context,
+    canvas: context.canvas,
 
     // In
     source: function source(_source, x, y) {
-      paste(_source, canvas, x, y);
+      paste(_source, context, x, y);
 
       return this;
     },
@@ -49,7 +52,7 @@ var Picture = function Picture(width, h) {
 
     // Out
     target: function target(_target, x, y) {
-      paste(canvas, _target, 0, 0, x, y);
+      paste(context, _target, 0, 0, x, y);
 
       return this;
     }

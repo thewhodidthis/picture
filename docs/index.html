@@ -164,7 +164,10 @@ Attempt at “squaring off” if height argument missing</p>
           </div>
 
           
-          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> canvas = <span class="hljs-built_in">Object</span>.assign(<span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'canvas'</span>), { width, <span class="hljs-attr">height</span>: h || width });</pre></div></div>
+          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> context = <span class="hljs-built_in">Object</span>.assign(<span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'canvas'</span>), {
+    width,
+    <span class="hljs-attr">height</span>: h || width
+  }).getContext(<span class="hljs-string">'2d'</span>);</pre></div></div>
           
         </li>
         
@@ -181,8 +184,8 @@ Attempt at “squaring off” if height argument missing</p>
 
           
           <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> {
-    canvas,
-    <span class="hljs-attr">context</span>: canvas.getContext(<span class="hljs-string">'2d'</span>),</pre></div></div>
+    context,
+    <span class="hljs-attr">canvas</span>: context.canvas,</pre></div></div>
           
         </li>
         
@@ -199,7 +202,7 @@ Attempt at “squaring off” if height argument missing</p>
 
           
           <div class="content"><div class='highlight'><pre>    source(source, x, y) {
-      paste(source, canvas, x, y);
+      paste(source, context, x, y);
 
       <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
     },</pre></div></div>
@@ -219,7 +222,7 @@ Attempt at “squaring off” if height argument missing</p>
 
           
           <div class="content"><div class='highlight'><pre>    target(target, x, y) {
-      paste(canvas, target, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, x, y);
+      paste(context, target, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, x, y);
 
       <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
     },

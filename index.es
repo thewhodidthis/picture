@@ -28,23 +28,26 @@ const paste = (source, target, sourceX, sourceY, targetX, targetY) => {
 const Picture = (width, h) => {
   // Create and resize offscreen canvas
   // Attempt at "squaring off" if height argument missing
-  const canvas = Object.assign(document.createElement('canvas'), { width, height: h || width });
+  const context = Object.assign(document.createElement('canvas'), {
+    width,
+    height: h || width
+  }).getContext('2d');
 
   // Bundle
   return {
-    canvas,
-    context: canvas.getContext('2d'),
+    context,
+    canvas: context.canvas,
 
     // In
     source(source, x, y) {
-      paste(source, canvas, x, y);
+      paste(source, context, x, y);
 
       return this;
     },
 
     // Out
     target(target, x, y) {
-      paste(canvas, target, 0, 0, x, y);
+      paste(context, target, 0, 0, x, y);
 
       return this;
     },

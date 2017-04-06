@@ -2,7 +2,7 @@
 'use strict';
 
 // # Picture
-// 2d canvas context helpers
+// Super minimal canvas helpers
 
 // `CanvasRenderingContext2D.drawImage` wrapper
 const paste = (source, target, sourceX, sourceY, targetX, targetY) => {
@@ -20,7 +20,7 @@ const paste = (source, target, sourceX, sourceY, targetX, targetY) => {
   // Apparently no transpile penalties over here
   const [w, h] = [s.width - sx, s.height - sy];
 
-  // Wipe
+  // Wipe out
   context.clearRect(tx, ty, w, h);
 
   // Draw
@@ -29,11 +29,10 @@ const paste = (source, target, sourceX, sourceY, targetX, targetY) => {
 
 // My factory
 const Picture = (width, h) => {
-  // Create and resize offscreen canvas
-  // Attempt at "squaring off" if height argument missing
+  // Create and resize offscreen canvas, square up if height missing
   const context = Object.assign(document.createElement('canvas'), {
     width,
-    height: h || width
+    height: h || width,
   }).getContext('2d');
 
   // Bundle

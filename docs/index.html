@@ -31,9 +31,6 @@
           </div>
 
           
-          <div class="content"><div class='highlight'><pre>
-<span class="hljs-keyword">const</span> getContext = <span class="hljs-function"><span class="hljs-params">canvas</span> =&gt;</span> canvas.getContext(<span class="hljs-string">'2d'</span>);</pre></div></div>
-          
         </li>
         
         
@@ -65,7 +62,7 @@
 
           
           <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> src = what.canvas || what;
-  <span class="hljs-keyword">const</span> ctx = getContext(onto.canvas || onto);</pre></div></div>
+  <span class="hljs-keyword">const</span> ctx = (onto.canvas || onto).getContext(<span class="hljs-string">'2d'</span>);</pre></div></div>
           
         </li>
         
@@ -95,7 +92,7 @@
             <div class="pilwrap">
               <a class="pilcrow" href="#section-5">&#182;</a>
             </div>
-            <p>Apparently no transpile penalties over here</p>
+            <p>Apparently no transpile type penalties over here</p>
 
           </div>
 
@@ -167,7 +164,7 @@
             <div class="pilwrap">
               <a class="pilcrow" href="#section-9">&#182;</a>
             </div>
-            <p>My <code>canvas</code> factories</p>
+            <p>Bundle up</p>
 
           </div>
 
@@ -193,7 +190,7 @@
     <span class="hljs-attr">height</span>: h || width,
   });
 
-  <span class="hljs-keyword">return</span> { canvas, source, target, <span class="hljs-attr">context</span>: getContext(canvas) };
+  <span class="hljs-keyword">return</span> { canvas, source, target, <span class="hljs-attr">context</span>: canvas.getContext(<span class="hljs-string">'2d'</span>) };
 };</pre></div></div>
           
         </li>

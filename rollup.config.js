@@ -8,9 +8,8 @@ export default {
   targets: [
     {
       format: 'iife',
-      indent: true,
       sourceMap: true,
-      moduleName: 'Picture',
+      moduleName: 'picture',
       dest: 'dist/picture.js'
     },
     {

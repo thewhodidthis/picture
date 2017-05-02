@@ -1,4 +1,4 @@
-import Picture from '../index.es';
+import { createPicture as Picture } from '../index.es';
 
 import Loop from './lib/loop.js';
 import Poly from './lib/poly.js';

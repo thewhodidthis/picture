@@ -1,4 +1,4 @@
-import Picture from '../../index.es';
+import { createPicture as Picture } from '../../index.es';
 
 const Rose = (size) => {
   const picture = Picture(size);

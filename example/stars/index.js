@@ -1,4 +1,4 @@
-import Picture from '../../index.es';
+import { from as Picture } from '../../index.es';
 
 import Loop from '../lib/loop.js';
 import Poly from '../lib/poly.js';
@@ -20,8 +20,7 @@ const Star = (size, n, m = 2) => {
   return output;
 };
 
-const canvas = document.getElementById('canvas');
-const master = Picture(canvas.width, canvas.height);
+const master = Picture(document.getElementById('canvas'));
 
 const getR = (i, s, p) => s - ((p * i) + i);
 

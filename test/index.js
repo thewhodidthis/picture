@@ -1,5 +1,6 @@
 const test = require('tape');
-const Picture = require('../');
+const picture = require('../');
+const Picture = picture.createPicture;
 
 // Add favicon
 const linkTag = document.createElement('link');
@@ -15,6 +16,15 @@ test('will default', (t) => {
 
   t.equals(p1.canvas.height, 20);
   t.equals(p2.canvas.height, 0);
+  t.end();
+});
+
+test('will merge', (t) => {
+  const myCanvas = document.createElement('canvas');
+  const p3 = picture.from(myCanvas);
+
+  t.equals(p3.canvas.width, 300);
+  t.equals(p3.canvas.height, 150);
   t.end();
 });
 

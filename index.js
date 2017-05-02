@@ -7,7 +7,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 // `CanvasRenderingContext2D.drawImage` wrapper
 var render = function render(what, onto, sourceX, sourceY, targetX, targetY) {
-  // Decide whether source/target objects are canvas elements or context-like
+  // Decide whether source/target objects are canvas elements or
+  // context-like by checking for the canvas property
   var src = what.canvas || what;
   var ctx = (onto.canvas || onto).getContext('2d');
 

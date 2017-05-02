@@ -4,13 +4,12 @@
 // # Picture
 // Super minimal canvas helpers
 
-const getContext = canvas => canvas.getContext('2d');
-
 // `CanvasRenderingContext2D.drawImage` wrapper
 const render = (what, onto, sourceX, sourceY, targetX, targetY) => {
-  // Decide whether source/target objects are canvas elements or context-like
+  // Decide whether source/target objects are canvas elements or
+  // context-like by checking for the canvas property
   const src = what.canvas || what;
-  const ctx = getContext(onto.canvas || onto);
+  const ctx = (onto.canvas || onto).getContext('2d');
 
   // Avoid default params for now
   const sx = sourceX || 0;
@@ -18,7 +17,7 @@ const render = (what, onto, sourceX, sourceY, targetX, targetY) => {
   const tx = targetX || 0;
   const ty = targetY || 0;
 
-  // Apparently no transpile penalties over here
+  // Apparently no transpile type penalties over here
   const [w, h] = [src.width - sx, src.height - sy];
 
   // Wipe out
@@ -38,7 +37,7 @@ function target(onto, x, y) {
   return render(this.context, onto, 0, 0, x, y);
 }
 
-// My `canvas` factory
+// Bundle up
 const createPicture = (width, h) => {
   // Create and resize offscreen `canvas`, square up if height missing
   const canvas = Object.assign(document.createElement('canvas'), {
@@ -46,8 +45,7 @@ const createPicture = (width, h) => {
     height: h || width,
   });
 
-  // Bundle
-  return { canvas, source, target, context: getContext(canvas) };
+  return { canvas, source, target, context: canvas.getContext('2d') };
 };
 
 // Based on existing `canvas`

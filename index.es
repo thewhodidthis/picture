@@ -3,7 +3,8 @@
 
 // `CanvasRenderingContext2D.drawImage` wrapper
 const render = (what, onto, sourceX, sourceY, targetX, targetY) => {
-  // Decide whether source/target objects are canvas elements or context-like
+  // Decide whether source/target objects are canvas elements or
+  // context-like by checking for the canvas property
   const src = what.canvas || what;
   const ctx = (onto.canvas || onto).getContext('2d');
 

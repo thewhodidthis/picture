@@ -4,12 +4,13 @@
 // # Picture
 // Super minimal canvas helpers
 
+const getContext = canvas => canvas.getContext('2d');
+
 // `CanvasRenderingContext2D.drawImage` wrapper
-const paste = (source, target, sourceX, sourceY, targetX, targetY) => {
+const render = (what, onto, sourceX, sourceY, targetX, targetY) => {
   // Decide whether source/target objects are canvas elements or context-like
-  const s = source.canvas || source;
-  const t = target.canvas || target;
-  const context = t.getContext('2d');
+  const src = what.canvas || what;
+  const ctx = getContext(onto.canvas || onto);
 
   // Avoid default params for now
   const sx = sourceX || 0;
@@ -18,43 +19,39 @@ const paste = (source, target, sourceX, sourceY, targetX, targetY) => {
   const ty = targetY || 0;
 
   // Apparently no transpile penalties over here
-  const [w, h] = [s.width - sx, s.height - sy];
+  const [w, h] = [src.width - sx, src.height - sy];
 
   // Wipe out
-  context.clearRect(tx, ty, w, h);
+  ctx.clearRect(tx, ty, w, h);
 
   // Draw
-  context.drawImage(s, sx, sy, w, h, tx, ty, w, h);
+  ctx.drawImage(src, sx, sy, w, h, tx, ty, w, h);
 };
 
-// My factory
-const Picture = (width, h) => {
-  // Create and resize offscreen canvas, square up if height missing
-  const context = Object.assign(document.createElement('canvas'), {
+// Because calling directly is faster than `bind`, `apply`, or `call`
+// https://jsperf.com/function-calls-direct-vs-apply-vs-call-vs-bind/60
+function source(what, x, y) {
+  return render(what, this.context, x, y);
+}
+
+function target(onto, x, y) {
+  return render(this.context, onto, 0, 0, x, y);
+}
+
+// My `canvas` factory
+const createPicture = (width, h) => {
+  // Create and resize offscreen `canvas`, square up if height missing
+  const canvas = Object.assign(document.createElement('canvas'), {
     width,
     height: h || width,
-  }).getContext('2d');
+  });
 
   // Bundle
-  return {
-    context,
-    canvas: context.canvas,
-
-    // In
-    source(source, x, y) {
-      paste(source, context, x, y);
-
-      return this;
-    },
-
-    // Out
-    target(target, x, y) {
-      paste(context, target, 0, 0, x, y);
-
-      return this;
-    },
-  };
+  return { canvas, source, target, context: getContext(canvas) };
 };
+
+// Based on existing `canvas`
+const from = canvas => Object.assign(createPicture(), { canvas });
 
 const Loop = (callback) => {
   let frameId;
@@ -94,7 +91,7 @@ const Poly = (size, n) => {
 };
 
 const Rose = (size) => {
-  const picture = Picture(size);
+  const picture = createPicture(size);
   const center = size * 0.5;
   const rose = {
     render(layers, colors, rot) {
@@ -125,35 +122,42 @@ const Rose = (size) => {
   return Object.assign(picture, rose);
 };
 
-const canvas = document.getElementById('canvas');
-const master = Picture(canvas.width, canvas.height);
+const Star = (size, n, m = 2) => {
+  // This is only accurate for the sizes I'm interested in right here
+  const isDegenerate = n % m === 0;
+
+  const points = Poly(size, n);
+  const output = Array.from({ length: n * m }).map((v, i) => {
+    const j = i * m;
+    const k = isDegenerate ? (j + j % m) / m : 0;
+    const x = (k + j) % n;
+
+    return points[x];
+  });
+
+  return output;
+};
+
+const master = from(document.getElementById('canvas'));
 
 const getR = (i, s, p) => s - ((p * i) + i);
 
-const size = 160;
-const data = [4, 3, 5];
+const size = 250;
+const data = [7, 5];
 
-const colors = ['#000', '#fff'];
-const layers = Array.from({ length: 22 });
-const shapes = data.map((n, j) => layers.map((v, i) => Poly(getR(i, 130, 5), n)));
+const colors = ['#000'];
+const layers = Array.from({ length: 21 });
+const shapes = data.map((n, j) => layers.map((v, i) => Star(getR(i, 200, 7), n)));
 const toggle = Loop((frame) => {
-  const r = 0.008 * frame;
+  const r = 0.0025 * frame;
 
   shapes.forEach((layers, i) => {
-    // Make a picture for each shape
     const rose = Rose(size);
-
-    // Position within master canvas
+    const a = i ? r + i : -r;
     const x = i * size;
     const y = (300 - size) * 0.5;
 
-    // Calculate base angle for each shape
-    const a = i % 2 ? r + (i * 0.5) : -r;
-
-    // No stroke
-    rose.context.strokeStyle = 'transparent';
-
-    // Cache shape, paste onto master
+    rose.context.strokeStyle = '#fff';
     rose.render(layers, colors, a).target(master, x, y);
   });
 });

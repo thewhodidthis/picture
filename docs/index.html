@@ -62,7 +62,7 @@ context-like by checking for the canvas property</p>
           </div>
 
           
-          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> src = what.canvas || what;
+          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> src = (what.canvas || what);
   <span class="hljs-keyword">const</span> ctx = (onto.canvas || onto).getContext(<span class="hljs-string">'2d'</span>);</pre></div></div>
           
         </li>
@@ -149,11 +149,15 @@ context-like by checking for the canvas property</p>
 
           
           <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">source</span>(<span class="hljs-params">what, x, y</span>) </span>{
-  <span class="hljs-keyword">return</span> render(what, <span class="hljs-keyword">this</span>.context, x, y);
+  render(what, <span class="hljs-keyword">this</span>.context, x, y);
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
 }
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">target</span>(<span class="hljs-params">onto, x, y</span>) </span>{
-  <span class="hljs-keyword">return</span> render(<span class="hljs-keyword">this</span>.context, onto, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, x, y);
+  render(<span class="hljs-keyword">this</span>.context, onto, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, x, y);
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
 }</pre></div></div>
           
         </li>
@@ -186,10 +190,8 @@ context-like by checking for the canvas property</p>
           </div>
 
           
-          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> canvas = <span class="hljs-built_in">Object</span>.assign(<span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'canvas'</span>), {
-    width,
-    <span class="hljs-attr">height</span>: h || width,
-  });
+          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> size = { width, <span class="hljs-attr">height</span>: h || width };
+  <span class="hljs-keyword">const</span> canvas = <span class="hljs-built_in">Object</span>.assign(<span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'canvas'</span>), size);
 
   <span class="hljs-keyword">return</span> { canvas, source, target, <span class="hljs-attr">context</span>: canvas.getContext(<span class="hljs-string">'2d'</span>) };
 };</pre></div></div>

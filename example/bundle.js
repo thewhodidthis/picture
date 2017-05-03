@@ -8,7 +8,7 @@
 const render = (what, onto, sourceX, sourceY, targetX, targetY) => {
   // Decide whether source/target objects are canvas elements or
   // context-like by checking for the canvas property
-  const src = what.canvas || what;
+  const src = (what.canvas || what);
   const ctx = (onto.canvas || onto).getContext('2d');
 
   // Avoid default params for now
@@ -44,10 +44,8 @@ function target(onto, x, y) {
 // Bundle up
 const createPicture = (width, h) => {
   // Create and resize offscreen `canvas`, square up if height missing
-  const canvas = Object.assign(document.createElement('canvas'), {
-    width,
-    height: h || width,
-  });
+  const size = { width, height: h || width };
+  const canvas = Object.assign(document.createElement('canvas'), size);
 
   return { canvas, source, target, context: canvas.getContext('2d') };
 };

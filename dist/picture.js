@@ -46,10 +46,8 @@ function target(onto, x, y) {
 // Bundle up
 var createPicture = function createPicture(width, h) {
   // Create and resize offscreen `canvas`, square up if height missing
-  var canvas = Object.assign(document.createElement('canvas'), {
-    width: width,
-    height: h || width
-  });
+  var size = { width: width, height: h || width };
+  var canvas = Object.assign(document.createElement('canvas'), size);
 
   return { canvas: canvas, source: source, target: target, context: canvas.getContext('2d') };
 };

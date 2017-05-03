@@ -33,11 +33,15 @@ var render = function render(what, onto, sourceX, sourceY, targetX, targetY) {
 // Because calling directly is faster than `bind`, `apply`, or `call`
 // https://jsperf.com/function-calls-direct-vs-apply-vs-call-vs-bind/60
 function source(what, x, y) {
-  return render(what, this.context, x, y);
+  render(what, this.context, x, y);
+
+  return this;
 }
 
 function target(onto, x, y) {
-  return render(this.context, onto, 0, 0, x, y);
+  render(this.context, onto, 0, 0, x, y);
+
+  return this;
 }
 
 // Bundle up

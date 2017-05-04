@@ -5,11 +5,11 @@
 // Super minimal canvas helpers
 
 // `CanvasRenderingContext2D.drawImage` wrapper
-const render = (what, onto, sourceX, sourceY, targetX, targetY) => {
+function render(source, target, sourceX, sourceY, targetX, targetY) {
   // Decide whether source/target objects are canvas elements or
   // context-like by checking for the canvas property
-  const src = (what.canvas || what);
-  const ctx = (onto.canvas || onto).getContext('2d');
+  const src = source.canvas || source;
+  const ctx = (target.canvas || target).getContext('2d');
 
   // Avoid default params for now
   const sx = sourceX || 0;
@@ -25,32 +25,32 @@ const render = (what, onto, sourceX, sourceY, targetX, targetY) => {
 
   // Draw
   ctx.drawImage(src, sx, sy, w, h, tx, ty, w, h);
-};
-
-// Because calling directly is faster than `bind`, `apply`, or `call`
-// https://jsperf.com/function-calls-direct-vs-apply-vs-call-vs-bind/60
-function source(what, x, y) {
-  render(what, this.context, x, y);
-
-  return this;
-}
-
-function target(onto, x, y) {
-  render(this.context, onto, 0, 0, x, y);
-
-  return this;
 }
 
 // Bundle up
-const createPicture = (width, h) => {
+const createPicture = (w, h) => {
   // Create and resize offscreen `canvas`, square up if height missing
-  const size = { width, height: h || width };
-  const canvas = Object.assign(document.createElement('canvas'), size);
+  const size = { width: w, height: h || w };
+  const context = Object.assign(document.createElement('canvas'), size).getContext('2d');
 
-  return { canvas, source, target, context: canvas.getContext('2d') };
+  return {
+    context,
+    canvas: context.canvas,
+    source(picture, x, y) {
+      render(picture, context, x, y);
+
+      return this;
+    },
+    target(picture, x, y) {
+      render(context, picture, 0, 0, x, y);
+
+      return this;
+    },
+  };
 };
 
 // Based on existing `canvas`
+const from = canvas => Object.assign(createPicture(), { canvas });
 
 const Loop = (callback) => {
   let frameId;
@@ -122,7 +122,7 @@ const Rose = (size) => {
 };
 
 const canvas = document.getElementById('canvas');
-const master = createPicture(canvas.width, canvas.height);
+const master = from(canvas);
 
 const getR = (i, s, p) => s - ((p * i) + i);
 
@@ -153,8 +153,6 @@ const toggle = Loop((frame) => {
     rose.render(layers, colors, a).target(master, x, y);
   });
 });
-
-canvas.parentNode.replaceChild(master.canvas, canvas);
 
 if (window !== window.top) {
   document.documentElement.className = 'is-iframe';

@@ -45,7 +45,7 @@
           </div>
 
           
-          <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> render = <span class="hljs-function">(<span class="hljs-params">what, onto, sourceX, sourceY, targetX, targetY</span>) =&gt;</span> {</pre></div></div>
+          <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">render</span>(<span class="hljs-params">source, target, sourceX, sourceY, targetX, targetY</span>) </span>{</pre></div></div>
           
         </li>
         
@@ -62,8 +62,8 @@ context-like by checking for the canvas property</p>
           </div>
 
           
-          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> src = (what.canvas || what);
-  <span class="hljs-keyword">const</span> ctx = (onto.canvas || onto).getContext(<span class="hljs-string">'2d'</span>);</pre></div></div>
+          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> src = source.canvas || source;
+  <span class="hljs-keyword">const</span> ctx = (target.canvas || target).getContext(<span class="hljs-string">'2d'</span>);</pre></div></div>
           
         </li>
         
@@ -131,7 +131,7 @@ context-like by checking for the canvas property</p>
 
           
           <div class="content"><div class='highlight'><pre>  ctx.drawImage(src, sx, sy, w, h, tx, ty, w, h);
-};</pre></div></div>
+}</pre></div></div>
           
         </li>
         
@@ -142,23 +142,12 @@ context-like by checking for the canvas property</p>
             <div class="pilwrap">
               <a class="pilcrow" href="#section-8">&#182;</a>
             </div>
-            <p>Because calling directly is faster than <code>bind</code>, <code>apply</code>, or <code>call</code>
-<a href="https://jsperf.com/function-calls-direct-vs-apply-vs-call-vs-bind/60">https://jsperf.com/function-calls-direct-vs-apply-vs-call-vs-bind/60</a></p>
+            <p>Bundle up</p>
 
           </div>
 
           
-          <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">source</span>(<span class="hljs-params">what, x, y</span>) </span>{
-  render(what, <span class="hljs-keyword">this</span>.context, x, y);
-
-  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
-}
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">target</span>(<span class="hljs-params">onto, x, y</span>) </span>{
-  render(<span class="hljs-keyword">this</span>.context, onto, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, x, y);
-
-  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
-}</pre></div></div>
+          <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> createPicture = <span class="hljs-function">(<span class="hljs-params">w, h</span>) =&gt;</span> {</pre></div></div>
           
         </li>
         
@@ -169,12 +158,29 @@ context-like by checking for the canvas property</p>
             <div class="pilwrap">
               <a class="pilcrow" href="#section-9">&#182;</a>
             </div>
-            <p>Bundle up</p>
+            <p>Create and resize offscreen <code>canvas</code>, square up if height missing</p>
 
           </div>
 
           
-          <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> createPicture = <span class="hljs-function">(<span class="hljs-params">width, h</span>) =&gt;</span> {</pre></div></div>
+          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> size = { <span class="hljs-attr">width</span>: w, <span class="hljs-attr">height</span>: h || w };
+  <span class="hljs-keyword">const</span> context = <span class="hljs-built_in">Object</span>.assign(<span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'canvas'</span>), size).getContext(<span class="hljs-string">'2d'</span>);
+
+  <span class="hljs-keyword">return</span> {
+    context,
+    <span class="hljs-attr">canvas</span>: context.canvas,
+    source(picture, x, y) {
+      render(picture, context, x, y);
+
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    },
+    target(picture, x, y) {
+      render(context, picture, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, x, y);
+
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    },
+  };
+};</pre></div></div>
           
         </li>
         
@@ -184,26 +190,6 @@ context-like by checking for the canvas property</p>
             
             <div class="pilwrap">
               <a class="pilcrow" href="#section-10">&#182;</a>
-            </div>
-            <p>Create and resize offscreen <code>canvas</code>, square up if height missing</p>
-
-          </div>
-
-          
-          <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> size = { width, <span class="hljs-attr">height</span>: h || width };
-  <span class="hljs-keyword">const</span> canvas = <span class="hljs-built_in">Object</span>.assign(<span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'canvas'</span>), size);
-
-  <span class="hljs-keyword">return</span> { canvas, source, target, <span class="hljs-attr">context</span>: canvas.getContext(<span class="hljs-string">'2d'</span>) };
-};</pre></div></div>
-          
-        </li>
-        
-        
-        <li id="section-11" class="section">
-          <div class="annotation">
-            
-            <div class="pilwrap">
-              <a class="pilcrow" href="#section-11">&#182;</a>
             </div>
             <p>Based on existing <code>canvas</code></p>
 

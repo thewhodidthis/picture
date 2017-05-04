@@ -1,11 +1,11 @@
-import { createPicture as Picture } from '../index.es';
+import { createPicture as Picture, from as pictureFrom } from '../index.es';
 
 import Loop from './lib/loop.js';
 import Poly from './lib/poly.js';
 import Rose from './lib/rose.js';
 
 const canvas = document.getElementById('canvas');
-const master = Picture(canvas.width, canvas.height);
+const master = pictureFrom(canvas);
 
 const getR = (i, s, p) => s - ((p * i) + i);
 
@@ -37,8 +37,6 @@ const toggle = Loop((frame) => {
     rose.render(layers, colors, a).target(master, x, y);
   });
 });
-
-canvas.parentNode.replaceChild(master.canvas, canvas);
 
 if (window !== window.top) {
   document.documentElement.className = 'is-iframe';

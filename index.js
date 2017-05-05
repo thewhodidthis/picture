@@ -18,7 +18,7 @@ function render(source, target, sourceX, sourceY, targetX, targetY) {
   var tx = targetX || 0;
   var ty = targetY || 0;
 
-  // Apparently no transpile type penalties over here
+  // Apparently no transpile step penalties over here
   var w = src.width - sx,
       h = src.height - sy;
 
@@ -30,32 +30,39 @@ function render(source, target, sourceX, sourceY, targetX, targetY) {
   ctx.drawImage(src, sx, sy, w, h, tx, ty, w, h);
 }
 
-// Bundle up
-var createPicture = function createPicture(w, h) {
-  // Create and resize offscreen `canvas`, square up if height missing
-  var size = { width: w, height: h || w };
-  var context = Object.assign(document.createElement('canvas'), size).getContext('2d');
+// Picture template
+var Picture2d = {
+  set canvas(canvas) {
+    this.context = canvas.getContext('2d');
+  },
+  get canvas() {
+    return this.context.canvas;
+  },
+  source: function source(s, x, y) {
+    render(s, this.context, x, y);
 
-  return {
-    context: context,
-    canvas: context.canvas,
-    source: function source(picture, x, y) {
-      render(picture, context, x, y);
+    return this;
+  },
+  target: function target(t, x, y) {
+    render(this.context, t, 0, 0, x, y);
 
-      return this;
-    },
-    target: function target(picture, x, y) {
-      render(context, picture, 0, 0, x, y);
-
-      return this;
-    }
-  };
+    return this;
+  }
 };
 
 // Based on existing `canvas`
 var from = function from(canvas) {
-  return Object.assign(createPicture(), { canvas: canvas });
+  return Object.assign(Object.create(Picture2d), { canvas: canvas });
 };
 
-exports.createPicture = createPicture;
+// Create and resize offscreen `canvas`, square up if height missing
+var createPicture = function createPicture(w, h) {
+  var canvasRect = { width: w, height: h || w };
+  var canvas = Object.assign(document.createElement('canvas'), canvasRect);
+
+  return from(canvas);
+};
+
+exports.Picture2d = Picture2d;
 exports.from = from;
+exports.createPicture = createPicture;

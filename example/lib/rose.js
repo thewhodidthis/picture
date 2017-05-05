@@ -1,12 +1,12 @@
 import { createPicture as Picture } from '../../index.es';
 
 const Rose = (size) => {
-  const picture = Picture(size);
-  const center = size * 0.5;
+  const pict = Picture(size);
+  const half = size * 0.5;
   const rose = {
     render(layers, colors, rot) {
       this.context.save();
-      this.context.translate(center, center);
+      this.context.translate(half, half);
 
       layers.forEach((points, i) => {
         this.context.rotate(rot);
@@ -29,7 +29,7 @@ const Rose = (size) => {
     },
   };
 
-  return Object.assign(picture, rose);
+  return Object.assign(pict, rose);
 };
 
 export default Rose;

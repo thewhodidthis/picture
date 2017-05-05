@@ -33,8 +33,8 @@ function render(source, target, sourceX, sourceY, targetX, targetY) {
 // Bundle up
 var createPicture = function createPicture(w, h) {
   // Create and resize offscreen `canvas`, square up if height missing
-  var dimensions = { width: w, height: h || w };
-  var context = Object.assign(document.createElement('canvas'), dimensions).getContext('2d');
+  var size = { width: w, height: h || w };
+  var context = Object.assign(document.createElement('canvas'), size).getContext('2d');
 
   return {
     context: context,

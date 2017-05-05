@@ -48,3 +48,4 @@ export const createPicture = (w, h) => {
 
 // Based on existing `canvas`
 export const from = canvas => Object.assign(createPicture(), { canvas });
+

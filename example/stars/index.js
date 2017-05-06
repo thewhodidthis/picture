@@ -45,8 +45,6 @@ const toggle = Loop((frame) => {
   });
 });
 
-canvas.parentNode.replaceChild(master.canvas, canvas);
-
 if (window !== window.top) {
   document.documentElement.className = 'is-iframe';
 }

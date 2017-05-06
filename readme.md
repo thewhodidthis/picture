@@ -18,7 +18,7 @@ open http://localhost:8000
 
 ### Example
 ```js
-// Process and download random image
+// Download and process random image
 import Picture from '@thewhodidthis/picture';
 
 const w = 640;

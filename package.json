@@ -59,7 +59,6 @@
     "eslint-plugin-import": "latest",
     "rollup": "latest",
     "rollup-plugin-babel": "latest",
-    "rollup-watch": "latest",
     "tape": "latest",
     "testling": "latest",
     "uglify-js": "latest"

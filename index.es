@@ -2,49 +2,52 @@
 // Super minimal canvas helpers
 
 // `CanvasRenderingContext2D.drawImage` wrapper
-function render(source, target, sourceX, sourceY, targetX, targetY) {
+export function picture(s, d, sX, sY, dX, dY) {
   // Decide whether source/target objects are canvas elements or
   // context-like by checking for the canvas property
-  const src = source.canvas || source;
-  const ctx = (target.canvas || target).getContext('2d');
+  const source = s.canvas || s;
+  const target = d.canvas || d;
 
   // Avoid default params for now
-  const sx = sourceX || 0;
-  const sy = sourceY || 0;
-  const tx = targetX || 0;
-  const ty = targetY || 0;
+  const sx = sX || 0;
+  const sy = sY || 0;
+  const dx = dX || 0;
+  const dy = dY || 0;
 
-  // Apparently no transpile type penalties over here
-  const [w, h] = [src.width - sx, src.height - sy];
+  // Apparently no transpiler penalties over here
+  const [w, h] = [source.width - sx, source.height - sy];
+
+  // Choose destination
+  const context = target.context || target.getContext('2d');
 
   // Wipe out
-  ctx.clearRect(tx, ty, w, h);
+  context.clearRect(dx, dy, w, h);
 
-  // Draw
-  ctx.drawImage(src, sx, sy, w, h, tx, ty, w, h);
+  // And draw
+  context.drawImage(source, sx, sy, w, h, dx, dy, w, h);
 }
 
-// Bundle up
+// No type cheching of course
+export const from = canvas => ({
+  canvas,
+  context: canvas.getContext('2d'),
+  source(copy, x, y) {
+    picture(copy, this.context, x, y);
+
+    return this;
+  },
+  target(copy, x, y) {
+    picture(this.context, copy, 0, 0, x, y);
+
+    return this;
+  },
+});
+
 export const createPicture = (w, h) => {
   // Create and resize offscreen `canvas`, square up if height missing
-  const size = { width: w, height: h || w };
-  const context = Object.assign(document.createElement('canvas'), size).getContext('2d');
+  const sample = document.createElement('canvas');
+  const canvas = Object.assign(sample, { width: w, height: h || w });
 
-  return {
-    context,
-    canvas: context.canvas,
-    source(picture, x, y) {
-      render(picture, context, x, y);
-
-      return this;
-    },
-    target(picture, x, y) {
-      render(context, picture, 0, 0, x, y);
-
-      return this;
-    },
-  };
+  return from(canvas);
 };
 
-// Based on existing `canvas`
-export const from = canvas => Object.assign(createPicture(), { canvas });

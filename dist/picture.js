@@ -5,59 +5,62 @@
 // Super minimal canvas helpers
 
 // `CanvasRenderingContext2D.drawImage` wrapper
-function render(source, target, sourceX, sourceY, targetX, targetY) {
+function picture(s, d, sX, sY, dX, dY) {
   // Decide whether source/target objects are canvas elements or
   // context-like by checking for the canvas property
-  var src = source.canvas || source;
-  var ctx = (target.canvas || target).getContext('2d');
+  var source = s.canvas || s;
+  var target = d.canvas || d;
 
   // Avoid default params for now
-  var sx = sourceX || 0;
-  var sy = sourceY || 0;
-  var tx = targetX || 0;
-  var ty = targetY || 0;
+  var sx = sX || 0;
+  var sy = sY || 0;
+  var dx = dX || 0;
+  var dy = dY || 0;
 
-  // Apparently no transpile type penalties over here
-  var w = src.width - sx,
-      h = src.height - sy;
+  // Apparently no transpiler penalties over here
+  var w = source.width - sx,
+      h = source.height - sy;
+
+  // Choose destination
+
+  var context = target.context || target.getContext('2d');
 
   // Wipe out
+  context.clearRect(dx, dy, w, h);
 
-  ctx.clearRect(tx, ty, w, h);
-
-  // Draw
-  ctx.drawImage(src, sx, sy, w, h, tx, ty, w, h);
+  // And draw
+  context.drawImage(source, sx, sy, w, h, dx, dy, w, h);
 }
 
-// Bundle up
-var createPicture = function createPicture(w, h) {
-  // Create and resize offscreen `canvas`, square up if height missing
-  var dimensions = { width: w, height: h || w };
-  var context = Object.assign(document.createElement('canvas'), dimensions).getContext('2d');
-
+// No type cheching of course
+var from = function from(canvas) {
   return {
-    context: context,
-    canvas: context.canvas,
-    source: function source(picture, x, y) {
-      render(picture, context, x, y);
+    canvas: canvas,
+    context: canvas.getContext('2d'),
+    source: function source(copy, x, y) {
+      picture(copy, this.context, x, y);
 
       return this;
     },
-    target: function target(picture, x, y) {
-      render(context, picture, 0, 0, x, y);
+    target: function target(copy, x, y) {
+      picture(this.context, copy, 0, 0, x, y);
 
       return this;
     }
   };
 };
 
-// Based on existing `canvas`
-var from = function from(canvas) {
-  return Object.assign(createPicture(), { canvas: canvas });
+var createPicture = function createPicture(w, h) {
+  // Create and resize offscreen `canvas`, square up if height missing
+  var sample = document.createElement('canvas');
+  var canvas = Object.assign(sample, { width: w, height: h || w });
+
+  return from(canvas);
 };
 
-exports.createPicture = createPicture;
+exports.picture = picture;
 exports.from = from;
+exports.createPicture = createPicture;
 
 }((this.picture = this.picture || {})));
 //# sourceMappingURL=picture.js.map

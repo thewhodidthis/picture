@@ -19,7 +19,7 @@ open http://localhost:8000
 ### Example
 ```js
 // Download and process random image
-import Picture from '@thewhodidthis/picture';
+import { createPicture as Picture } from '@thewhodidthis/picture';
 
 const w = 640;
 const h = 360;

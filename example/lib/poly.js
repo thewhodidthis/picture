@@ -1,5 +1,4 @@
 const TAU = Math.PI * 2;
-
 const Poly = (size, n) => {
   const center = size * 0.5;
 

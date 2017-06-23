@@ -1,8 +1,3 @@
-noscript {
-  margin: 6px;
-  font: italic 12px/28px arial, sans-serif;
-}
-
 html {
   overflow: scroll;
 }
@@ -36,6 +31,11 @@ figcaption p {
 
 canvas {
   display: block;
+}
+
+noscript {
+  margin: 6px;
+  font: italic 12px/28px arial, sans-serif;
 }
 
 .is-iframe {

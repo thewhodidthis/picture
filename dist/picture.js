@@ -63,4 +63,3 @@ exports.from = from;
 exports.createPicture = createPicture;
 
 }((this.picture = this.picture || {})));
-//# sourceMappingURL=picture.js.map

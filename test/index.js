@@ -1,5 +1,6 @@
 const test = require('tape');
 const picture = require('../');
+
 const Picture = picture.createPicture;
 
 // Add favicon

@@ -8,7 +8,6 @@ export default {
   targets: [
     {
       format: 'iife',
-      sourceMap: true,
       moduleName: 'picture',
       dest: 'dist/picture.js'
     },

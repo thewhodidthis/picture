@@ -1,51 +1,42 @@
-html {
-  overflow: scroll;
-}
-
-body,
-p,
-figure {
+body {
   margin: 0;
+  padding: 0.5rem;
+  overflow: hidden;
+  box-sizing: border-box;
+  font: 16px/1.25 arial, sans-serif;
+}
+
+small {
+  font-size: 0.75rem;
+}
+
+p {
+  margin: 0;
+  font-size: 0.875rem;
 }
 
 figure {
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  width: 500px;
-  height: 300px;
+  top: 50%;
+  left: 50%;
   position: absolute;
+  text-align: center;
+  margin: -180px 0 0 -270px;
 }
 
 figcaption {
-  font-size: 90%;
-  text-align: center;
-  margin-top: 0.5rem;
+  margin: 0.5rem;
 }
 
-figcaption p {
-  padding-left: 0.5rem;
-}
-
-canvas {
+canvas,
+img {
   display: block;
-}
-
-noscript {
-  margin: 6px;
-  font: italic 12px/28px arial, sans-serif;
-}
-
-.is-iframe {
-  overflow: hidden;
 }
 
 .is-iframe figure {
   top: 0;
+  left: 0;
   margin: 0;
-  border: 0;
+  width: 100%;
 }
 
 .is-iframe figcaption {

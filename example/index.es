@@ -4,12 +4,12 @@ import Loop from './lib/loop';
 import Poly from './lib/poly';
 import Rose from './lib/rose';
 
-const canvas = document.getElementById('canvas');
+const canvas = document.querySelector('canvas');
 const master = pictureFrom(canvas);
 
 const getR = (i, s, p) => s - ((p * i) + i);
 
-const size = 160;
+const size = 180;
 const data = [4, 3, 5];
 
 const colors = ['#000', '#fff'];
@@ -22,7 +22,7 @@ const toggle = Loop((frame) => {
     const rose = Rose(size);
     const a = i ? r + i : -r;
     const x = i * size;
-    const y = (300 - size) * 0.5;
+    const y = (360 - size) * 0.5;
 
     rose.context.strokeStyle = 'transparent';
     rose.render(layers, colors, a).target(master, x, y);

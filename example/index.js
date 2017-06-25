@@ -132,14 +132,14 @@ var Rose = function Rose(size) {
   return Object.assign(pict, withRose);
 };
 
-var canvas = document.getElementById('canvas');
+var canvas = document.querySelector('canvas');
 var master = from(canvas);
 
 var getR = function getR(i, s, p) {
   return s - (p * i + i);
 };
 
-var size = 160;
+var size = 180;
 var data = [4, 3, 5];
 
 var colors = ['#000', '#fff'];
@@ -156,7 +156,7 @@ var toggle = Loop(function (frame) {
     var rose = Rose(size);
     var a = i ? r + i : -r;
     var x = i * size;
-    var y = (300 - size) * 0.5;
+    var y = (360 - size) * 0.5;
 
     rose.context.strokeStyle = 'transparent';
     rose.render(layers, colors, a).target(master, x, y);

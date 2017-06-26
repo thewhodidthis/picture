@@ -6,10 +6,11 @@ import Rose from './lib/rose';
 
 const canvas = document.querySelector('canvas');
 const master = pictureFrom(canvas);
+const height = canvas.height;
 
 const getR = (i, s, p) => s - ((p * i) + i);
 
-const size = 180;
+const size = 165;
 const data = [4, 3, 5];
 
 const colors = ['#000', '#fff'];
@@ -22,7 +23,7 @@ const toggle = Loop((frame) => {
     const rose = Rose(size);
     const a = i ? r + i : -r;
     const x = i * size;
-    const y = (360 - size) * 0.5;
+    const y = (height - size) * 0.5;
 
     rose.context.strokeStyle = 'transparent';
     rose.render(layers, colors, a).target(master, x, y);

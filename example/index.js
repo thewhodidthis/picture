@@ -150,7 +150,7 @@ var shapes = data.map(function (n) {
   });
 });
 
-var toggle = Loop(function (frame) {
+var render = Loop(function (frame) {
   var r = 0.008 * frame;
 
   shapes.forEach(function (layers, i) {
@@ -168,7 +168,6 @@ if (window !== window.top) {
   document.documentElement.className = 'is-iframe';
 }
 
-document.addEventListener('click', toggle);
-window.addEventListener('load', toggle);
+window.addEventListener('load', render);
 
 }());

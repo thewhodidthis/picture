@@ -27,7 +27,6 @@
   "scripts": {
     "test": "browserify test/*.js | testling -x open",
     "lint": "eslint . example --ext .es test/*.js",
-    "docs": "docco -e .js -l ivory index.es",
     "start": "rollup -c && uglifyjs dist/picture.js -cmo dist/picture.min.js",
     "example": "npm run example:build && npm run example:serve",
     "example:build": "rollup -c -i example/index.es -f iife -o example/index.js",
@@ -44,7 +43,6 @@
     "babel-plugin-external-helpers": "latest",
     "babel-preset-latest": "latest",
     "browserify": "latest",
-    "docco": "github:67656e65726963/docco",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "latest",
     "eslint-plugin-import": "latest",

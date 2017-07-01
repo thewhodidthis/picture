@@ -3,14 +3,6 @@ const picture = require('../');
 
 const Picture = picture.createPicture;
 
-// Add favicon
-const linkTag = document.createElement('link');
-
-linkTag.rel = 'shortcut icon';
-linkTag.href = 'data:;base64,iVBORw0KGgo=';
-
-document.head.appendChild(linkTag);
-
 test('will default', (t) => {
   const p1 = Picture(20);
   const p2 = Picture();
@@ -20,12 +12,25 @@ test('will default', (t) => {
   t.end();
 });
 
-test('will merge', (t) => {
+test('will transfer dimensions', (t) => {
   const myCanvas = document.createElement('canvas');
   const p3 = picture.from(myCanvas);
 
-  t.equals(p3.canvas.width, 300);
-  t.equals(p3.canvas.height, 150);
+  t.equals(p3.canvas.width + p3.canvas.height, 450);
+  t.end();
+});
+
+test('will adjust context', (t) => {
+  const myContext = document.createElement('canvas').getContext('2d');
+  const p4 = Picture();
+  const p5 = picture.from(p4.canvas);
+
+  t.is(p4.context, p5.context);
+
+  p5.canvas = myContext.canvas;
+
+  t.isNot(p4.context, p5.context);
+  t.is(p5.context, myContext);
   t.end();
 });
 

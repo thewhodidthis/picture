@@ -36,8 +36,10 @@ function picture(s, d, sX, sY, dX, dY) {
 // No type cheching of course
 var from = function from(canvas) {
   return {
+    get context() {
+      return this.canvas.getContext('2d');
+    },
     canvas: canvas,
-    context: canvas.getContext('2d'),
     source: function source(copy, x, y) {
       picture(copy, this.context, x, y);
 

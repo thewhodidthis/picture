@@ -15,7 +15,6 @@ const data = [4, 3, 5];
 
 const colors = ['#000', '#fff'];
 const shapes = data.map(n => Array.from({ length: 22 }).map((v, i) => Poly(getR(i, 130, 5), n)));
-
 const render = Loop((frame) => {
   const r = 0.008 * frame;
 

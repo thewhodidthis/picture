@@ -2,12 +2,6 @@
   "name": "@thewhodidthis/picture",
   "version": "0.0.11",
   "description": "Helps setup canvas drawings",
-  "keywords": [
-    "canvas",
-    "drawing",
-    "picture",
-    "sprite"
-  ],
   "main": "index.js",
   "module": "index.es",
   "homepage": "https://github.com/thewhodidthis/picture#readme",
@@ -18,20 +12,18 @@
   "bugs": {
     "url": "https://github.com/thewhodidthis/picture/issues"
   },
-  "directories": {
-    "example": "example"
-  },
-  "config": {
-    "remote": "thewhodidthis@zazie:www/example/picture/"
-  },
   "scripts": {
-    "test": "browserify test/*.js | testling -x open",
-    "lint": "eslint . example --ext .es test/*.js",
-    "start": "rollup -c && uglifyjs dist/picture.js -cmo dist/picture.min.js",
-    "example": "npm run example:build && npm run example:serve",
-    "example:build": "rollup -c -i example/index.es -f iife -o example/index.js",
-    "example:serve": "php -S localhost:8000 -t example/",
-    "example:press": "rsync -avruzLPC --delete --exclude=.DS_Store ./example/ $npm_package_config_remote"
+    "pretest": "eslint test.js",
+    "test": "browserify test | kpow",
+    "prestart": "eslint index.es",
+    "start": "rollup -f cjs index.es | buble > index.js",
+    "preexample": "eslint example/*.es 'example/lib/**/*.js'",
+    "example": "cd example; rollup -f iife index.es | buble > index.js",
+    "postexample": "open example/index.html",
+    "postpublish": "rsync -avruzLPC --del --exclude=.* ./example/ thewhodidthis@zazie:www/example/picture/"
+  },
+  "eslintConfig": {
+    "extends": "@thewhodidthis"
   },
   "engines": {
     "node": ">=4.2.4",
@@ -39,18 +31,12 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "babel-eslint": "latest",
-    "babel-plugin-external-helpers": "latest",
-    "babel-preset-latest": "latest",
+    "@thewhodidthis/eslint-config": "latest",
     "browserify": "latest",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb-base": "latest",
-    "eslint-plugin-import": "latest",
+    "buble": "latest",
+    "kpow": "latest",
     "rollup": "latest",
-    "rollup-plugin-babel": "latest",
-    "tape": "latest",
-    "testling": "latest",
-    "uglify-js": "latest"
+    "tape": "latest"
   },
   "author": "sChzs BkgNns <sotirios.bakagiannis@gmail.com> (https://www.thewhodidthis.com)",
   "license": "Unlicense"

@@ -1,6 +1,6 @@
 {
   "name": "@thewhodidthis/picture",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Helps setup canvas drawings",
   "main": "index.js",
   "module": "index.es",

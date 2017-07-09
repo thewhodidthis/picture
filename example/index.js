@@ -5,7 +5,7 @@
 // Super minimal canvas helpers
 
 // `CanvasRenderingContext2D.drawImage` wrapper
-function picture(s, d, sX, sY, dX, dY) {
+var picture = function (s, d, sX, sY, dX, dY) {
   // Decide whether source/target objects are canvas elements or
   // context-like by checking for the canvas property
   var source = s.canvas || s;
@@ -18,11 +18,11 @@ function picture(s, d, sX, sY, dX, dY) {
   var dy = dY || 0;
 
   // Apparently no transpiler penalties over here
-  var w = source.width - sx,
-      h = source.height - sy;
+  var ref = [source.width - sx, source.height - sy];
+  var w = ref[0];
+  var h = ref[1];
 
   // Choose destination
-
   var context = target.context || target.getContext('2d');
 
   // Wipe out
@@ -30,46 +30,40 @@ function picture(s, d, sX, sY, dX, dY) {
 
   // And draw
   context.drawImage(source, sx, sy, w, h, dx, dy, w, h);
-}
+};
 
 // No type cheching of course
-var from = function from(canvas) {
-  return {
-    get context() {
-      return this.canvas.getContext('2d');
-    },
-    canvas: canvas,
-    source: function source(copy, x, y) {
-      picture(copy, this.context, x, y);
+var from = function (canvas) { return ({
+  get context () {
+    return this.canvas.getContext('2d')
+  },
+  canvas: canvas,
+  source: function source (copy, x, y) {
+    picture(copy, this.context, x, y);
 
-      return this;
-    },
-    target: function target(copy, x, y) {
-      picture(this.context, copy, 0, 0, x, y);
+    return this
+  },
+  target: function target (copy, x, y) {
+    picture(this.context, copy, 0, 0, x, y);
 
-      return this;
-    }
-  };
-};
+    return this
+  }
+}); };
 
-var createPicture = function createPicture(w, h) {
+var createPicture = function (w, h) {
   // Create and resize offscreen `canvas`, square up if height missing
-  var sample = document.createElement('canvas');
-  var canvas = Object.assign(sample, { width: w, height: h || w });
+  var canvas = document.createElement('canvas');
+  var sample = Object.assign(canvas, { width: w, height: h || w });
 
-  return from(canvas);
+  return from(sample)
 };
 
-var Loop = function Loop(callback) {
-  var frameId = void 0;
+var Loop = function (callback) {
+  var frameId;
 
-  var play = function play(fn) {
-    return window.requestAnimationFrame(fn);
-  };
-  var stop = function stop() {
-    return window.cancelAnimationFrame(frameId);
-  };
-  var loop = function loop() {
+  var play = function (fn) { return window.requestAnimationFrame(fn); };
+  var stop = function () { return window.cancelAnimationFrame(frameId); };
+  var loop = function () {
     callback(frameId);
 
     if (frameId) {
@@ -79,78 +73,72 @@ var Loop = function Loop(callback) {
 
   // On/Off
   return function () {
-    frameId = frameId === undefined ? play(loop) : stop();
-  };
+    frameId = (frameId === undefined) ? play(loop) : stop();
+  }
 };
 
 var TAU = Math.PI * 2;
-var Poly = function Poly(size, n) {
+var Poly = function (size, n) {
   var center = size * 0.5;
 
   // So I can use with `Array.map()` straight away
   var points = Array.from({ length: n || 5 }).map(function (point, i) {
     // https://en.wikipedia.org/wiki/Regular_polygon
-    var a = i * TAU / n;
+    var a = (i * TAU) / n;
     var x = center * Math.cos(a);
     var y = center * Math.sin(a);
 
-    return { x: x, y: y };
+    return { x: x, y: y }
   });
 
-  return points;
+  return points
 };
 
-var Rose = function Rose(size) {
+var Rose = function (size) {
   var pict = createPicture(size);
   var half = size * 0.5;
   var withRose = {
-    render: function render(layers, colors, rot) {
-      var _this = this;
+    render: function render (layers, colors, rot) {
+      var context = this.context;
 
-      this.context.save();
-      this.context.translate(half, half);
+      context.save();
+      context.translate(half, half);
 
       layers.forEach(function (points, i) {
-        _this.context.rotate(rot);
-        _this.context.beginPath();
+        context.rotate(rot);
+        context.beginPath();
 
         points.forEach(function (p) {
-          _this.context.lineTo(p.x, p.y);
+          context.lineTo(p.x, p.y);
         });
 
-        _this.context.closePath();
-        _this.context.stroke();
+        context.closePath();
+        context.stroke();
 
-        _this.context.fillStyle = colors[i % colors.length];
-        _this.context.fill();
+        context.fillStyle = colors[i % colors.length];
+        context.fill();
       });
 
-      this.context.restore();
+      context.restore();
 
-      return this;
+      return this
     }
   };
 
-  return Object.assign(pict, withRose);
+  return Object.assign(pict, withRose)
 };
 
 var canvas = document.querySelector('canvas');
 var master = from(canvas);
 var height = canvas.height;
 
-var getR = function getR(i, s, p) {
-  return s - (p * i + i);
-};
+var getR = function (i, s, p) { return s - ((p * i) + i); };
 
 var size = 165;
 var data = [4, 3, 5];
 
 var colors = ['#000', '#fff'];
-var shapes = data.map(function (n) {
-  return Array.from({ length: 22 }).map(function (v, i) {
-    return Poly(getR(i, 130, 5), n);
-  });
-});
+var shapes = data.map(function (n) { return Array.from({ length: 22 }).map(function (v, i) { return Poly(getR(i, 130, 5), n); }); });
 var render = Loop(function (frame) {
   var r = 0.008 * frame;
 
@@ -172,3 +160,4 @@ if (window !== window.top) {
 window.addEventListener('load', render);
 
 }());
+

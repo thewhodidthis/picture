@@ -17,7 +17,7 @@
     "test": "browserify test | kpow",
     "prestart": "eslint index.es",
     "start": "rollup -f cjs index.es | buble > index.js",
-    "preexample": "eslint example/*.es 'example/lib/**/*.js'",
+    "preexample": "eslint example/*.es example/lib/*.js",
     "example": "cd example; rollup -f iife index.es | buble > index.js",
     "postexample": "open example/index.html",
     "postpublish": "rsync -avruzLPC --del --exclude=.* ./example/ thewhodidthis@zazie:www/example/picture/"

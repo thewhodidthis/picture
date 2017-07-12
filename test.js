@@ -1,14 +1,11 @@
+require('kpow')()
+
 const test = require('tape')
-const kpow = require('kpow')
-const picture = require('./')
-
-const Picture = picture.createPicture
-
-kpow()
+const { from: pictureFrom, createPicture } = require('./')
 
 test('will default', (t) => {
-  const p1 = Picture(20)
-  const p2 = Picture()
+  const p1 = createPicture(20)
+  const p2 = createPicture()
 
   t.equals(p1.canvas.height, 20)
   t.equals(p2.canvas.height, 0)
@@ -17,7 +14,7 @@ test('will default', (t) => {
 
 test('will transfer dimensions', (t) => {
   const canvas = document.createElement('canvas')
-  const p3 = picture.from(canvas)
+  const p3 = pictureFrom(canvas)
 
   t.equals(p3.canvas.width + p3.canvas.height, 450)
   t.end()
@@ -25,8 +22,8 @@ test('will transfer dimensions', (t) => {
 
 test('will adjust context', (t) => {
   const canvas = document.createElement('canvas')
-  const p4 = Picture()
-  const p5 = picture.from(p4.canvas)
+  const p4 = createPicture()
+  const p5 = pictureFrom(p4.canvas)
 
   t.is(p4.context, p5.context)
 

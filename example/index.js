@@ -34,16 +34,16 @@ var picture = function (s, d, sX, sY, dX, dY) {
 
 // No type cheching of course
 var from = function (canvas) { return ({
-  get context () {
+  get context() {
     return this.canvas.getContext('2d')
   },
   canvas: canvas,
-  source: function source (copy, x, y) {
+  source: function source(copy, x, y) {
     picture(copy, this.context, x, y);
 
     return this
   },
-  target: function target (copy, x, y) {
+  target: function target(copy, x, y) {
     picture(this.context, copy, 0, 0, x, y);
 
     return this
@@ -98,28 +98,28 @@ var Rose = function (size) {
   var pict = createPicture(size);
   var half = size * 0.5;
   var withRose = {
-    render: function render (layers, colors, rot) {
-      var context = this.context;
+    render: function render(layers, colors, rot) {
+      var ctx = this.context;
 
-      context.save();
-      context.translate(half, half);
+      ctx.save();
+      ctx.translate(half, half);
 
       layers.forEach(function (points, i) {
-        context.rotate(rot);
-        context.beginPath();
+        ctx.rotate(rot);
+        ctx.beginPath();
 
         points.forEach(function (p) {
-          context.lineTo(p.x, p.y);
+          ctx.lineTo(p.x, p.y);
         });
 
-        context.closePath();
-        context.stroke();
+        ctx.closePath();
+        ctx.stroke();
 
-        context.fillStyle = colors[i % colors.length];
-        context.fill();
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fill();
       });
 
-      context.restore();
+      ctx.restore();
 
       return this
     }

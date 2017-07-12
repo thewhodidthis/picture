@@ -4,28 +4,28 @@ const Rose = (size) => {
   const pict = Picture(size)
   const half = size * 0.5
   const withRose = {
-    render (layers, colors, rot) {
-      const context = this.context
+    render(layers, colors, rot) {
+      const ctx = this.context
 
-      context.save()
-      context.translate(half, half)
+      ctx.save()
+      ctx.translate(half, half)
 
       layers.forEach((points, i) => {
-        context.rotate(rot)
-        context.beginPath()
+        ctx.rotate(rot)
+        ctx.beginPath()
 
         points.forEach((p) => {
-          context.lineTo(p.x, p.y)
+          ctx.lineTo(p.x, p.y)
         })
 
-        context.closePath()
-        context.stroke()
+        ctx.closePath()
+        ctx.stroke()
 
-        context.fillStyle = colors[i % colors.length]
-        context.fill()
+        ctx.fillStyle = colors[i % colors.length]
+        ctx.fill()
       })
 
-      context.restore()
+      ctx.restore()
 
       return this
     }

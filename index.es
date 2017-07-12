@@ -29,16 +29,16 @@ export const picture = (s, d, sX, sY, dX, dY) => {
 
 // No type cheching of course
 export const from = canvas => ({
-  get context () {
+  get context() {
     return this.canvas.getContext('2d')
   },
   canvas,
-  source (copy, x, y) {
+  source(copy, x, y) {
     picture(copy, this.context, x, y)
 
     return this
   },
-  target (copy, x, y) {
+  target(copy, x, y) {
     picture(this.context, copy, 0, 0, x, y)
 
     return this

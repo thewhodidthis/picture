@@ -78,6 +78,7 @@ var Loop = function (callback) {
 };
 
 var TAU = Math.PI * 2;
+
 var Poly = function (size, n) {
   var center = size * 0.5;
 
@@ -97,6 +98,7 @@ var Poly = function (size, n) {
 var Rose = function (size) {
   var pict = createPicture(size);
   var half = size * 0.5;
+
   var withRose = {
     render: function render(layers, colors, rot) {
       var ctx = this.context;

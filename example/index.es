@@ -1,8 +1,7 @@
-import { from as pictureFrom } from '../index.es'
+import { from as pictureFrom } from '../index.mjs'
 
-import Loop from './lib/loop'
-import Poly from './lib/poly'
-import Rose from './lib/rose'
+import Loop from './loop.mjs'
+import { Poly, Rose } from './poly.mjs'
 
 const canvas = document.querySelector('canvas')
 const master = pictureFrom(canvas)

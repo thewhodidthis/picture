@@ -58,28 +58,9 @@ var createPicture = function (w, h) {
   return from(sample)
 };
 
-var Loop = function (callback) {
-  var frameId;
-
-  var play = function (fn) { return window.requestAnimationFrame(fn); };
-  var stop = function () { return window.cancelAnimationFrame(frameId); };
-  var loop = function () {
-    callback(frameId);
-
-    if (frameId) {
-      frameId = play(loop);
-    }
-  };
-
-  // On/Off
-  return function () {
-    frameId = (frameId === undefined) ? play(loop) : stop();
-  }
-};
-
 var TAU = Math.PI * 2;
 
-var Poly = function (size, n) {
+var createPoly = function (size, n) {
   var center = size * 0.5;
 
   // So I can use with `Array.map()` straight away
@@ -95,7 +76,7 @@ var Poly = function (size, n) {
   return points
 };
 
-var Rose = function (size) {
+var createRose = function (size) {
   var pict = createPicture(size);
   var half = size * 0.5;
 
@@ -130,6 +111,10 @@ var Rose = function (size) {
   return Object.assign(pict, withRose)
 };
 
+if (window !== window.top) {
+  document.documentElement.classList.add('is-iframe');
+}
+
 var canvas = document.querySelector('canvas');
 var master = from(canvas);
 var height = canvas.height;
@@ -140,12 +125,14 @@ var size = 165;
 var data = [4, 3, 5];
 
 var colors = ['#000', '#fff'];
-var shapes = data.map(function (n) { return Array.from({ length: 22 }).map(function (v, i) { return Poly(getR(i, 130, 5), n); }); });
-var render = Loop(function (frame) {
-  var r = 0.008 * frame;
+var shapes = data.map(function (n) { return Array.from({ length: 22 })
+  .map(function (v, i) { return createPoly(getR(i, 130, 5), n); }); });
+
+var render = function (t) {
+  var r = 0.0005 * t;
 
   shapes.forEach(function (layers, i) {
-    var rose = Rose(size);
+    var rose = createRose(size);
     var a = i ? r + i : -r;
     var x = i * size;
     var y = (height - size) * 0.5;
@@ -153,13 +140,13 @@ var render = Loop(function (frame) {
     rose.context.strokeStyle = 'transparent';
     rose.render(layers, colors, a).target(master, x, y);
   });
+
+  window.requestAnimationFrame(render);
+};
+
+window.addEventListener('load', function () {
+  window.requestAnimationFrame(render);
 });
-
-if (window !== window.top) {
-  document.documentElement.className = 'is-iframe';
-}
-
-window.addEventListener('load', render);
 
 }());
 

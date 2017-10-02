@@ -3,7 +3,8 @@
 
 ### Setup
 ```sh
-npm install thewhodidthis/picture
+# Fetch latest from github
+npm i thewhodidthis/picture
 ```
 
 ### Usage

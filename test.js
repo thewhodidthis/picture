@@ -1,9 +1,10 @@
 'use strict'
 
-require('kpow')()
-
+const kpow = require('kpow')
 const test = require('tape')
 const { from: pictureFrom, createPicture } = require('./')
+
+kpow()
 
 test('will default', (t) => {
   const p1 = createPicture(20)

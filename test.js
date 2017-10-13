@@ -1,7 +1,7 @@
 'use strict'
 
-const kpow = require('kpow')
 const test = require('tape')
+const kpow = require('cutaway')
 const { from: pictureFrom, createPicture } = require('./')
 
 kpow()

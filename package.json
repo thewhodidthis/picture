@@ -4,6 +4,10 @@
   "description": "Helps setup canvas drawings",
   "main": "index.js",
   "module": "index.es",
+  "keywords": [
+    "canvas",
+    "html5"
+  ],
   "homepage": "https://github.com/thewhodidthis/picture#readme",
   "repository": {
     "type": "git",
@@ -14,7 +18,7 @@
   },
   "scripts": {
     "pretest": "eslint test.js",
-    "test": "browserify test | kpow",
+    "test": "rollup -c node:x -f iife test.js | kpow",
     "prestart": "eslint index.es",
     "start": "rollup -f cjs index.es | buble > index.js",
     "preexample": "eslint example --ext es,js --ignore-pattern index.js",
@@ -31,13 +35,13 @@
   "dependencies": {},
   "devDependencies": {
     "@thewhodidthis/eslint-config": "latest",
-    "browserify": "latest",
     "buble": "latest",
     "cutaway": "latest",
     "eslint": "latest",
     "kpow": "latest",
     "rollup": "latest",
-    "tape": "latest"
+    "rollup-config-x": "latest",
+    "tapeless": "latest"
   },
   "author": "sChzs BkgNns <sotirios.bakagiannis@gmail.com> (https://www.thewhodidthis.com)",
   "license": "Unlicense"

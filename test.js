@@ -1,38 +1,31 @@
-'use strict'
+import cutaway from 'cutaway'
 
-const test = require('tape')
-const kpow = require('cutaway')
-const { from: pictureFrom, createPicture } = require('./')
+cutaway()
 
-kpow()
+import { from as pictureFrom, createPicture } from './index.es'
+import { veto } from 'tapeless'
 
-test('will default', (t) => {
-  const p1 = createPicture(20)
-  const p2 = createPicture()
+const is = veto((a, b) => a === b, 'equals')
+const isNot = veto((a, b) => a !== b, 'equals not')
 
-  t.equals(p1.canvas.height, 20)
-  t.equals(p2.canvas.height, 0)
-  t.end()
-})
+const canvas = document.createElement('canvas')
 
-test('will transfer dimensions', (t) => {
-  const canvas = document.createElement('canvas')
-  const p3 = pictureFrom(canvas)
+const p1 = createPicture(20)
+const p2 = createPicture()
 
-  t.equals(p3.canvas.width + p3.canvas.height, 450)
-  t.end()
-})
+is(p1.canvas.height, 20, 'is equal', 'will default')
+is(p2.canvas.height, 0, 'is equal')
 
-test('will adjust context', (t) => {
-  const canvas = document.createElement('canvas')
-  const p4 = createPicture()
-  const p5 = pictureFrom(p4.canvas)
+const p3 = pictureFrom(canvas)
 
-  t.is(p4.context, p5.context)
+is(p3.canvas.width + p3.canvas.height, 450, 'will transfer dimensions')
 
-  p5.canvas = canvas
+const p4 = createPicture()
+const p5 = pictureFrom(p4.canvas)
 
-  t.isNot(p4.context, p5.context)
-  t.is(p5.context, canvas.getContext('2d'))
-  t.end()
-})
+is(p4.context, p5.context, 'is equal', 'will adjust context')
+
+p5.canvas = canvas
+
+isNot(p4.context, p5.context, 'is not equal')
+is(p5.context, canvas.getContext('2d'), 'is equal')

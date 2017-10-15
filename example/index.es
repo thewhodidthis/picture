@@ -1,5 +1,5 @@
-import { from as pictureFrom } from '../index.es'
 import { createPoly, createRose } from './poly.js'
+import { from as pictureFrom } from '../index.es'
 
 if (window !== window.top) {
   document.documentElement.classList.add('is-iframe')

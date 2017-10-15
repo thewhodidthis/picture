@@ -2,7 +2,7 @@
 'use strict';
 
 // # Picture
-// Super minimal canvas helpers
+// Minimalistic canvas helpers
 
 // `CanvasRenderingContext2D.drawImage` wrapper
 var picture = function (s, d, sX, sY, dX, dY) {

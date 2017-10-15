@@ -1,9 +1,6 @@
-import cutaway from 'cutaway'
-
-cutaway()
-
+import 'cutaway'
+import { stat, veto } from 'tapeless'
 import { from as pictureFrom, createPicture } from './index.es'
-import { veto } from 'tapeless'
 
 const is = veto((a, b) => a === b, 'equals')
 const isNot = veto((a, b) => a !== b, 'equals not')
@@ -20,12 +17,13 @@ const p3 = pictureFrom(canvas)
 
 is(p3.canvas.width + p3.canvas.height, 450, 'will transfer dimensions')
 
-const p4 = createPicture()
-const p5 = pictureFrom(p4.canvas)
+const p4 = pictureFrom(p2.canvas)
 
-is(p4.context, p5.context, 'is equal', 'will adjust context')
+is(p2.context, p4.context, 'is equal', 'will adjust context')
 
-p5.canvas = canvas
+p4.canvas = canvas
 
-isNot(p4.context, p5.context, 'is not equal')
-is(p5.context, canvas.getContext('2d'), 'is equal')
+isNot(p2.context, p4.context, 'is not equal')
+is(p4.context, canvas.getContext('2d'), 'is equal')
+
+stat()

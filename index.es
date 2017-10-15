@@ -1,5 +1,5 @@
 // # Picture
-// Super minimal canvas helpers
+// Canvas drawing helpers
 
 // `CanvasRenderingContext2D.drawImage` wrapper
 export const picture = (s, d, sX, sY, dX, dY) => {

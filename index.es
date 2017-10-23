@@ -27,7 +27,6 @@ export const picture = (s, d, sX, sY, dX, dY) => {
   context.drawImage(source, sx, sy, w, h, dx, dy, w, h)
 }
 
-// No type cheching of course
 export const from = canvas => ({
   get context() {
     return this.canvas.getContext('2d')
@@ -45,10 +44,10 @@ export const from = canvas => ({
   }
 })
 
-export const createPicture = (w, h) => {
-  // Create and resize offscreen `canvas`, square up if height missing
+export const createPicture = (width, height = width) => {
+  // Setup and resize offscreen `canvas`
   const canvas = document.createElement('canvas')
-  const sample = Object.assign(canvas, { width: w, height: h || w })
+  const sample = Object.assign(canvas, { width, height })
 
   return from(sample)
 }

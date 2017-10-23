@@ -2,7 +2,7 @@
 'use strict';
 
 // # Picture
-// Minimalistic canvas helpers
+// Canvas drawing helpers
 
 // `CanvasRenderingContext2D.drawImage` wrapper
 var picture = function (s, d, sX, sY, dX, dY) {
@@ -32,7 +32,6 @@ var picture = function (s, d, sX, sY, dX, dY) {
   context.drawImage(source, sx, sy, w, h, dx, dy, w, h);
 };
 
-// No type cheching of course
 var from = function (canvas) { return ({
   get context() {
     return this.canvas.getContext('2d')
@@ -50,10 +49,12 @@ var from = function (canvas) { return ({
   }
 }); };
 
-var createPicture = function (w, h) {
-  // Create and resize offscreen `canvas`, square up if height missing
+var createPicture = function (width, height) {
+  if ( height === void 0 ) height = width;
+
+  // Setup and resize offscreen `canvas`
   var canvas = document.createElement('canvas');
-  var sample = Object.assign(canvas, { width: w, height: h || w });
+  var sample = Object.assign(canvas, { width: width, height: height });
 
   return from(sample)
 };

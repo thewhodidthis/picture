@@ -1,5 +1,4 @@
-## Picture
-> Helps setup canvas drawings
+> Canvas drawing helpers
 
 ### Setup
 ```sh
@@ -8,21 +7,15 @@ npm i thewhodidthis/picture
 ```
 
 ### Usage
-```sh
-# Open using default browser
-open node_modules/@thewhodidthis/picture/example/index.html
-```
-
-### Example
 ```js
 // Download and process random image
-import { createPicture as Picture } from '@thewhodidthis/picture'
+import { createPicture } from '@thewhodidthis/picture'
 
 const w = 640
 const h = 360
 
-const buffer = Picture(w, h)
-const master = Picture(w, h)
+const buffer = createPicture(w, h)
+const master = createPicture(w, h)
 
 const output = Object.assign({
   filter() {

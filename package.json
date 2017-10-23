@@ -2,9 +2,6 @@
   "name": "@thewhodidthis/picture",
   "version": "0.1.1",
   "description": "Helps setup canvas drawings",
-  "keywords": [
-    "canvas"
-  ],
   "main": "index.js",
   "module": "index.es",
   "homepage": "https://github.com/thewhodidthis/picture#readme",
@@ -20,7 +17,7 @@
     "test": "rollup -c node:x -f iife test.js | kpow",
     "prestart": "eslint index.es",
     "start": "rollup -f cjs index.es > index.js",
-    "preexample": "eslint example --ext es,js --ignore-pattern index.js",
+    "preexample": "cd example; eslint index.es poly.js",
     "example": "cd example; rollup -f iife index.es | buble > index.js",
     "postexample": "open example/index.html"
   },
@@ -42,6 +39,10 @@
     "rollup-config-x": "latest",
     "tapeless": "latest"
   },
+  "keywords": [
+    "picture",
+    "canvas"
+  ],
   "author": "sChzs BkgNns <sotirios.bakagiannis@gmail.com> (https://www.thewhodidthis.com)",
   "license": "Unlicense"
 }

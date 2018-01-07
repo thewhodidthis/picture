@@ -59,6 +59,10 @@ var createPicture = function (width, height) {
   return from(sample)
 };
 
+if (window !== window.top) {
+  document.documentElement.classList.add('is-iframe');
+}
+
 var TAU = Math.PI * 2;
 
 var createPoly = function (size, n) {
@@ -78,43 +82,41 @@ var createPoly = function (size, n) {
 };
 
 var createRose = function (size) {
-  var pict = createPicture(size);
-  var half = size * 0.5;
+  var source = createPicture(size);
+  var center = size * 0.5;
 
   var withRose = {
-    render: function render(layers, colors, rot) {
-      var ctx = this.context;
+    render: function render(layers, colors, corner) {
+      var target = this.context;
 
-      ctx.save();
-      ctx.translate(half, half);
+      target.save();
+      target.translate(center, center);
 
       layers.forEach(function (points, i) {
-        ctx.rotate(rot);
-        ctx.beginPath();
+        target.rotate(corner);
+        target.beginPath();
 
         points.forEach(function (p) {
-          ctx.lineTo(p.x, p.y);
+          target.lineTo(p.x, p.y);
         });
 
-        ctx.closePath();
-        ctx.stroke();
+        target.closePath();
 
-        ctx.fillStyle = colors[i % colors.length];
-        ctx.fill();
+        target.strokeStyle = 'transparent';
+        target.stroke();
+
+        target.fillStyle = colors[i % colors.length];
+        target.fill();
       });
 
-      ctx.restore();
+      target.restore();
 
       return this
     }
   };
 
-  return Object.assign(pict, withRose)
+  return Object.assign(source, withRose)
 };
-
-if (window !== window.top) {
-  document.documentElement.classList.add('is-iframe');
-}
 
 var canvas = document.querySelector('canvas');
 var master = from(canvas);
@@ -122,7 +124,7 @@ var height = canvas.height;
 
 var getR = function (i, s, p) { return s - ((p * i) + i); };
 
-var size = 165;
+var size = 180;
 var data = [4, 3, 5];
 
 var colors = ['#000', '#fff'];
@@ -138,7 +140,6 @@ var render = function (t) {
     var x = i * size;
     var y = (height - size) * 0.5;
 
-    rose.context.strokeStyle = 'transparent';
     rose.render(layers, colors, a).target(master, x, y);
   });
 

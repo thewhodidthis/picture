@@ -6,23 +6,25 @@ Object.defineProperty(exports, '__esModule', { value: true });
 // Canvas drawing helpers
 
 // `CanvasRenderingContext2D.drawImage` wrapper
-const picture = (s, d, sX, sY, dX, dY) => {
+var picture = function (s, d, sX, sY, dX, dY) {
   // Decide whether source/target objects are canvas elements or
   // context-like by checking for the canvas property
-  const source = s.canvas || s;
-  const target = d.canvas || d;
+  var source = s.canvas || s;
+  var target = d.canvas || d;
 
   // Avoid default params for now
-  const sx = sX || 0;
-  const sy = sY || 0;
-  const dx = dX || 0;
-  const dy = dY || 0;
+  var sx = sX || 0;
+  var sy = sY || 0;
+  var dx = dX || 0;
+  var dy = dY || 0;
 
   // Apparently no transpiler penalties over here
-  const [w, h] = [source.width - sx, source.height - sy];
+  var ref = [source.width - sx, source.height - sy];
+  var w = ref[0];
+  var h = ref[1];
 
   // Choose destination
-  const context = target.context || target.getContext('2d');
+  var context = target.context || target.getContext('2d');
 
   // Wipe out
   context.clearRect(dx, dy, w, h);
@@ -31,27 +33,29 @@ const picture = (s, d, sX, sY, dX, dY) => {
   context.drawImage(source, sx, sy, w, h, dx, dy, w, h);
 };
 
-const from = canvas => ({
+var from = function (canvas) { return ({
   get context() {
     return this.canvas.getContext('2d')
   },
-  canvas,
-  source(copy, x, y) {
+  canvas: canvas,
+  source: function source(copy, x, y) {
     picture(copy, this.context, x, y);
 
     return this
   },
-  target(copy, x, y) {
+  target: function target(copy, x, y) {
     picture(this.context, copy, 0, 0, x, y);
 
     return this
   }
-});
+}); };
 
-const createPicture = (width, height = width) => {
+var createPicture = function (width, height) {
+  if ( height === void 0 ) height = width;
+
   // Setup and resize offscreen `canvas`
-  const canvas = document.createElement('canvas');
-  const sample = Object.assign(canvas, { width, height });
+  var canvas = document.createElement('canvas');
+  var sample = Object.assign(canvas, { width: width, height: height });
 
   return from(sample)
 };
@@ -59,3 +63,4 @@ const createPicture = (width, height = width) => {
 exports.picture = picture;
 exports.from = from;
 exports.createPicture = createPicture;
+

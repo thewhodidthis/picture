@@ -65,35 +65,28 @@ if (window !== window.top) {
 
 var TAU = Math.PI * 2;
 
-var createPoly = function (size, n) {
-  var center = size * 0.5;
+// https://en.wikipedia.org/wiki/Regular_polygon
+var createPoly = function (radius, edges) { return Array.from({ length: edges }).map(function (v, i) {
+  var a = (i * TAU) / edges;
+  var x = radius * Math.cos(a);
+  var y = radius * Math.sin(a);
 
-  // So I can use with `Array.map()` straight away
-  var points = Array.from({ length: n || 5 }).map(function (point, i) {
-    // https://en.wikipedia.org/wiki/Regular_polygon
-    var a = (i * TAU) / n;
-    var x = center * Math.cos(a);
-    var y = center * Math.sin(a);
+  return { x: x, y: y }
+}); };
 
-    return { x: x, y: y }
-  });
-
-  return points
-};
-
-var createRose = function (size) {
-  var source = createPicture(size);
-  var center = size * 0.5;
+var createRose = function (spread, colors) {
+  var source = createPicture(spread);
+  var middle = spread * 0.5;
 
   var withRose = {
-    render: function render(layers, colors, corner) {
+    render: function render(parts, angle) {
       var target = this.context;
 
       target.save();
-      target.translate(center, center);
+      target.translate(middle, middle);
 
-      layers.forEach(function (points, i) {
-        target.rotate(corner);
+      parts.forEach(function (points, i) {
+        target.rotate(angle);
         target.beginPath();
 
         points.forEach(function (p) {
@@ -119,28 +112,27 @@ var createRose = function (size) {
 };
 
 var canvas = document.querySelector('canvas');
-var master = from(canvas);
-var height = canvas.height;
+var output = from(canvas);
 
-var getR = function (i, s, p) { return s - ((p * i) + i); };
-
-var size = 180;
-var data = [4, 3, 5];
-
+var spread = 180;
 var colors = ['#000', '#fff'];
-var shapes = data.map(function (n) { return Array.from({ length: 22 })
-  .map(function (v, i) { return createPoly(getR(i, 130, 5), n); }); });
+
+var middle = function (x) { return x * 0.5; };
+
+var radius = function (v, i) { return middle(150 - ((3 * i) + i)); };
+var shapes = [4, 3, 5].map(function (n) { return Array.from({ length: 30 }).map(radius).map(function (v) { return createPoly(v, n); }); });
+
+var margin = [canvas.width - (shapes.length * spread), canvas.height - spread].map(middle);
 
 var render = function (t) {
   var r = 0.0005 * t;
 
-  shapes.forEach(function (layers, i) {
-    var rose = createRose(size);
-    var a = i ? r + i : -r;
-    var x = i * size;
-    var y = (height - size) * 0.5;
+  shapes.forEach(function (data, i) {
+    var rose = createRose(spread, colors);
+    var a = i % 2 ? r + i : -r;
+    var x = i * spread;
 
-    rose.render(layers, colors, a).target(master, x, y);
+    rose.render(data, a).target(output, margin[0] + x, margin[1]);
   });
 
   window.requestAnimationFrame(render);

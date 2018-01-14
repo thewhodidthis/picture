@@ -115,12 +115,12 @@ var canvas = document.querySelector('canvas');
 var output = from(canvas);
 
 var spread = 180;
-var colors = ['#000', '#fff'];
+var colors = ['#fff', '#000'];
 
 var middle = function (x) { return x * 0.5; };
 
-var radius = function (v, i) { return middle(150 - ((3 * i) + i)); };
-var shapes = [4, 3, 5].map(function (n) { return Array.from({ length: 30 }).map(radius).map(function (v) { return createPoly(v, n); }); });
+var radius = function (v, i) { return middle(150 - ((9 * i) + i)); };
+var shapes = [4, 3, 5].map(function (n) { return Array.from({ length: 15 }).map(radius).map(function (v) { return createPoly(v, n); }); });
 
 var margin = [canvas.width - (shapes.length * spread), canvas.height - spread].map(middle);
 

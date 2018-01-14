@@ -56,12 +56,12 @@ const canvas = document.querySelector('canvas')
 const output = pictureFrom(canvas)
 
 const spread = 180
-const colors = ['#000', '#fff']
+const colors = ['#fff', '#000']
 
 const middle = x => x * 0.5
 
-const radius = (v, i) => middle(150 - ((3 * i) + i))
-const shapes = [4, 3, 5].map(n => Array.from({ length: 30 }).map(radius).map(v => createPoly(v, n)))
+const radius = (v, i) => middle(150 - ((9 * i) + i))
+const shapes = [4, 3, 5].map(n => Array.from({ length: 15 }).map(radius).map(v => createPoly(v, n)))
 
 const margin = [canvas.width - (shapes.length * spread), canvas.height - spread].map(middle)
 

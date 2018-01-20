@@ -59,88 +59,49 @@ var createPicture = function (width, height) {
   return from(sample)
 };
 
+var canvas = document.querySelector('canvas');
+var target = from(canvas);
+
+var w = canvas.width;
+var h = canvas.height;
+
+var source = document.createElement('img');
+var buffer = createPicture(w, h);
+
+var frame = 0;
+var shift = 0;
+
+var period = 15;
+var frames = 40 * w;
+
+var draw = function () {
+  if (frame % period === 0) {
+    buffer.source(source, shift, 0).target(target);
+
+    shift += w;
+    shift %= frames;
+  }
+
+  frame = window.requestAnimationFrame(draw);
+};
+
+var html = document.documentElement;
+
 if (window !== window.top) {
-  document.documentElement.classList.add('is-iframe');
+  html.classList.add('is-iframe');
 }
 
-var TAU = Math.PI * 2;
+html.classList.add('is-mining');
 
-// https://en.wikipedia.org/wiki/Regular_polygon
-var createPoly = function (radius, edges) { return Array.from({ length: edges }).map(function (v, i) {
-  var a = (i * TAU) / edges;
-  var x = radius * Math.cos(a);
-  var y = radius * Math.sin(a);
+source.addEventListener('load', function () {
+  html.classList.remove('is-mining');
 
-  return { x: x, y: y }
-}); };
-
-var createRose = function (spread, colors) {
-  var source = createPicture(spread);
-  var middle = spread * 0.5;
-
-  var withRose = {
-    render: function render(parts, angle) {
-      var target = this.context;
-
-      target.save();
-      target.translate(middle, middle);
-
-      parts.forEach(function (points, i) {
-        target.rotate(angle);
-        target.beginPath();
-
-        points.forEach(function (p) {
-          target.lineTo(p.x, p.y);
-        });
-
-        target.closePath();
-
-        target.strokeStyle = 'transparent';
-        target.stroke();
-
-        target.fillStyle = colors[i % colors.length];
-        target.fill();
-      });
-
-      target.restore();
-
-      return this
-    }
-  };
-
-  return Object.assign(source, withRose)
-};
-
-var canvas = document.querySelector('canvas');
-var output = from(canvas);
-
-var spread = 180;
-var colors = ['#fff', '#000'];
-
-var middle = function (x) { return x * 0.5; };
-
-var radius = function (v, i) { return middle(150 - ((9 * i) + i)); };
-var shapes = [4, 3, 5].map(function (n) { return Array.from({ length: 15 }).map(radius).map(function (v) { return createPoly(v, n); }); });
-
-var margin = [canvas.width - (shapes.length * spread), canvas.height - spread].map(middle);
-
-var render = function (t) {
-  var r = 0.0005 * t;
-
-  shapes.forEach(function (data, i) {
-    var rose = createRose(spread, colors);
-    var a = i % 2 ? r + i : -r;
-    var x = i * spread;
-
-    rose.render(data, a).target(output, margin[0] + x, margin[1]);
-  });
-
-  window.requestAnimationFrame(render);
-};
-
-window.addEventListener('load', function () {
-  window.requestAnimationFrame(render);
+  draw();
 });
+
+// Source video from
+// https://www.pond5.com/stock-footage/44599211
+source.setAttribute('src', 'source.gif');
 
 }());
 

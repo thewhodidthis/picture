@@ -44,6 +44,25 @@ img {
   display: block;
 }
 
+canvas {
+  background: #000;
+  height: 360px;
+  width: 640px;
+}
+
+.is-mining::after {
+  box-sizing: border-box;
+  content: "PLEASE WAIT...";
+  display: inline-block;
+  font-size: 0.75rem;
+  height: 0;
+  left: 0;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  width: 100%;
+}
+
 .is-iframe {
   overflow: hidden;
 }

@@ -1,6 +1,6 @@
 import 'cutaway'
 import { report, assert } from 'tapeless'
-import { from as pictureFrom, createPicture } from './index.es'
+import { from as pictureFrom, createPicture } from './index.mjs'
 
 const { ok, equal, notEqual } = assert
 

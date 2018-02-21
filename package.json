@@ -18,14 +18,15 @@
     "prestart": "eslint index.mjs",
     "start": "rollup -f cjs index.mjs > index.js",
     "preexample": "eslint example/index.js",
-    "example": "cp index.mjs example/picture.js"
+    "example": "cp index.mjs example/picture.js",
+    "postexample": "cd example; rollup -f iife index.js > fallback.js"
   },
   "eslintConfig": {
     "extends": "@thewhodidthis"
   },
   "engines": {
-    "node": ">=6.4.0",
-    "npm": ">=3.11.0"
+    "node": ">=6.11.0",
+    "npm": ">=3.10.10"
   },
   "dependencies": {},
   "devDependencies": {

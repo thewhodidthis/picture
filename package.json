@@ -19,7 +19,7 @@
     "start": "rollup -f cjs index.mjs > index.js",
     "preexample": "eslint example/index.js",
     "example": "cp index.mjs example/picture.js",
-    "postexample": "cd example; rollup -f iife index.js > fallback.js"
+    "postexample": "cd example; rollup -f iife index.js > bundle.js"
   },
   "eslintConfig": {
     "extends": "@thewhodidthis"

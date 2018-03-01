@@ -1,4 +1,4 @@
-import { createPicture, from } from './picture.js'
+import { createPicture, from } from '../index.mjs'
 
 const canvas = document.querySelector('canvas')
 const target = from(canvas)

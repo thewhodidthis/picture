@@ -56,6 +56,6 @@ const createPicture = (width, height = width) => {
   return from(sample)
 };
 
-exports.picture = picture;
-exports.from = from;
 exports.createPicture = createPicture;
+exports.from = from;
+exports.picture = picture;

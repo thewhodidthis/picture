@@ -1,12 +1,13 @@
 html {
   font: 16px/1.25 arial, sans-serif;
+  height: 100%;
 }
 
 body {
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   margin: 0;
-  overflow: hidden;
-  padding: 0.5rem;
+  min-height: 100%;
 }
 
 a {
@@ -18,34 +19,29 @@ a:hover {
   text-decoration: underline;
 }
 
-small {
-  font-size: 0.75rem;
-}
-
 p {
   font-size: 0.875rem;
   margin: 0;
 }
 
 figure {
-  left: 50%;
-  margin: -180px 0 0 -320px;
-  position: absolute;
-  text-align: center;
-  top: 50%;
+  margin: auto;
+  max-width: 640px;
+  padding: 1.5rem 0 1rem;
 }
 
 figcaption {
   margin: 0.5rem 0 0;
+  text-align: center;
 }
 
-canvas,
 img {
-  display: block;
+  vertical-align: middle;
 }
 
 canvas {
-  background: #000;
+  background: black url('screenshot.jpg') center/contain no-repeat;
+  display: block;
   height: 360px;
   width: 640px;
 }

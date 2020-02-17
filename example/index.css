@@ -40,7 +40,7 @@ img {
 }
 
 canvas {
-  background: black url('screenshot.jpg') center/contain no-repeat;
+  background: black url('screenshot.png') center/contain no-repeat;
   display: block;
   height: 360px;
   width: 640px;

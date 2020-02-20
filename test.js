@@ -1,5 +1,5 @@
 import 'cutaway'
-import { report, assert } from 'tapeless/browser'
+import { report, assert } from 'tapeless'
 import { from as pictureFrom, createPicture } from './index.mjs'
 
 const { ok, equal, notEqual } = assert

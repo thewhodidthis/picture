@@ -1,12 +1,18 @@
-> Canvas drawing helpers
+## about
 
-### Setup
+Canvas drawing helpers.
+
+## setup
+
+Fetch latest from GitHub directly:
+
 ```sh
-# Fetch latest from github
-npm i thewhodidthis/picture
+# Includes ESM and CJS versions
+npm install thewhodidthis/picture
 ```
 
-### Usage
+## usage
+
 ```js
 // Download and process random image
 import { createPicture } from '@thewhodidthis/picture'

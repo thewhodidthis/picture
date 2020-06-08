@@ -13,6 +13,8 @@ npm install thewhodidthis/picture
 
 ## usage
 
+Import the factory function, give it a width and height, get a `CanvasRenderingContext2D` containing object in return. For example,
+
 ```js
 // Download and process random image
 import { createPicture } from '@thewhodidthis/picture'

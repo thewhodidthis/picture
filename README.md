@@ -76,4 +76,5 @@ sprite.setAttribute("src", `//source.unsplash.com/random/${w}x${h}`)
 
 ## see also
 
+- [@thewhodidthis/sound](https://github.com/thewhodidthis/sound/)
 - [@thewhodidthis/glx](https://github.com/thewhodidthis/glx/)

@@ -69,7 +69,7 @@ sprite.addEventListener("load", () => {
   })
 })
 
-// Replace sprite url
+// Replace sprite url.
 sprite.setAttribute("crossOrigin", "anonymous")
 sprite.setAttribute("src", `//source.unsplash.com/random/${w}x${h}`)
 ```

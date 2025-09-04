@@ -1,0 +1,18 @@
+{
+  "name": "@thewhodidthis/picture",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Helps setup canvas drawings",
+  "homepage": "https://github.com/thewhodidthis/picture#readme",
+  "bugs": "https://github.com/thewhodidthis/picture/issues",
+  "repository": "github:thewhodidthis/picture",
+  "license": "ISC",
+  "author": "Thepersonwhodidthis <me@thewhodidthis.com> (http://thewhodidthis.com)",
+  "engines": {
+    "node": ">=18.14.0",
+    "npm": ">=9.2.1"
+  },
+  "browser": "./main.js",
+  "type": "module",
+  "exports": "./main.js"
+}
